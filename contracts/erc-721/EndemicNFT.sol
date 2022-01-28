@@ -26,11 +26,10 @@ contract EndemicNFT is ERC721Base {
 
     event Mint(uint256 indexed tokenId, address artistId);
 
-    function mint(
-        address recipient,
-        address artist,
-        string calldata tokenURI
-    ) external returns (bool) {
+    function mint(address recipient, string calldata tokenURI)
+        external
+        returns (bool)
+    {
         require(
             _msgSender() == owner() || isApprovedForAll(owner(), _msgSender()),
             "mint caller is not owner nor approved"
@@ -42,7 +41,7 @@ contract EndemicNFT is ERC721Base {
         _safeMint(recipient, tokenId);
         _setTokenURI(tokenId, tokenURI);
 
-        emit Mint(tokenId, artist);
+        emit Mint(tokenId, owner());
 
         return true;
     }

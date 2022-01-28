@@ -1,3 +1,7 @@
+.PHONY: deployArtMinter
+deployArtMinter:
+	npx hardhat run scripts/minter/deploy-art-minter.js --network ${network}
+
 .PHONY: deployContractImporter
 deployContractImporter:
 	npx hardhat run scripts/import/deploy-contract-importer.js --network ${network}

@@ -8,7 +8,7 @@
     "coverage": "npx hardhat coverage --network hardhat"
   },
   "dependencies": {
-    "@nomiclabs/hardhat-etherscan": "^2.1.8",
+    "@nomiclabs/hardhat-etherscan": "^3.0.0",
     "@openzeppelin/contracts": "4.4.1",
     "@openzeppelin/contracts-upgradeable": "^4.4.1",
     "@openzeppelin/hardhat-upgrades": "^1.12.1",

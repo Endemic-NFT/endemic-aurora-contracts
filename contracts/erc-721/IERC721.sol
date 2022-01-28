@@ -21,9 +21,7 @@ interface IERC721 {
 
     function supportsInterface(bytes4) external view returns (bool);
 
-    function mint(
-        address recipient,
-        address artist,
-        string calldata tokenURI
-    ) external returns (bool);
+    function mint(address recipient, string calldata tokenURI)
+        external
+        returns (bool);
 }
