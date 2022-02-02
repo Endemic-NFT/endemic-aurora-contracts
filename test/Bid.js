@@ -355,6 +355,30 @@ describe('Bid', function () {
       expect(feeBalance).to.equal(ethers.utils.parseUnits('0.11875'));
     });
 
+    it('should fail to accept bid for other token', async () => {
+      await bidContract.placeBid(nftContract.address, 1, 1000000, {
+        value: ethers.utils.parseUnits('0.515'),
+      });
+
+      await bidContract.placeBid(nftContract.address, 2, 1000000, {
+        value: ethers.utils.parseUnits('0.115'),
+      });
+
+      const bidId = (
+        await bidContract.getBidByToken(nftContract.address, 1, 0)
+      )[0];
+
+      await expect(
+        safeTransferWithBytes(
+          nftContract,
+          user1,
+          user1.address,
+          bidContract.address,
+          2,
+          bidId
+        )
+      ).to.be.revertedWith('Invalid bid');
+    });
     it('should not charge maker fee if seller is owner of master nft', async () => {
       await masterNftContract.mintNFT(user1.address);
 
