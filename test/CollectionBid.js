@@ -3,7 +3,7 @@ const { ethers, network, upgrades } = require('hardhat');
 const BN = require('bignumber.js');
 const {
   deployEndemicNFT,
-  deployBid,
+  deployCollectionBid,
   deployEndemicMasterNFT,
   deployContractRegistry,
   deployFeeProvider,
@@ -11,7 +11,7 @@ const {
 } = require('./helpers/deploy');
 const safeTransferWithBytes = require('./helpers/safeTransferWithBytes');
 
-describe('Bid', function () {
+describe('CollectionBid', function () {
   let bidContract,
     masterNftContract,
     nftContract,
@@ -56,7 +56,7 @@ describe('Bid', function () {
       initialFee
     );
 
-    bidContract = await deployBid(
+    bidContract = await deployCollectionBid(
       owner,
       feeProviderContract.address,
       royaltiesProviderContract.address,
@@ -85,18 +85,12 @@ describe('Bid', function () {
     beforeEach(deploy);
 
     it('should successfully create a bid', async () => {
-      const placeBidTx = await bidContract.placeBid(
-        nftContract.address,
-        1,
-        1000,
-        {
-          value: ethers.utils.parseUnits('0.515'),
-        }
-      );
+      const placeBidTx = await bidContract.placeBid(nftContract.address, 1000, {
+        value: ethers.utils.parseUnits('0.515'),
+      });
 
       const activeBid = await bidContract.getBidByBidder(
         nftContract.address,
-        1,
         owner.address
       );
 
@@ -105,7 +99,6 @@ describe('Bid', function () {
         .withArgs(
           activeBid.bidId,
           nftContract.address,
-          1,
           owner.address,
           activeBid.price,
           activeBid.expiresAt
@@ -117,20 +110,19 @@ describe('Bid', function () {
       expect(activeBid.priceWithFee).to.equal(ethers.utils.parseUnits('0.515'));
     });
 
-    it('should fail to bid multiple times on same token', async () => {
-      await bidContract.placeBid(nftContract.address, 1, 1000, {
+    it('should fail to bid multiple times on same collection', async () => {
+      await bidContract.placeBid(nftContract.address, 1000, {
         value: ethers.utils.parseUnits('0.515'),
       });
 
       await expect(
-        bidContract.placeBid(nftContract.address, 1, 1000, {
+        bidContract.placeBid(nftContract.address, 1000, {
           value: ethers.utils.parseUnits('0.616'),
         })
       ).to.be.revertedWith('Bid already exists');
 
       const activeBid = await bidContract.getBidByBidder(
         nftContract.address,
-        1,
         owner.address
       );
 
@@ -142,29 +134,21 @@ describe('Bid', function () {
 
     it('should fail to create bid with no eth sent', async () => {
       await expect(
-        bidContract.placeBid(nftContract.address, 1, 1000, {
+        bidContract.placeBid(nftContract.address, 1000, {
           value: 0,
         })
       ).to.be.revertedWith('Invalid value sent');
     });
 
-    it('should fail to bid on token owned by bidder', async () => {
-      await expect(
-        bidContract.connect(user1).placeBid(nftContract.address, 1, 1000, {
-          value: ethers.utils.parseUnits('0.5'),
-        })
-      ).to.be.revertedWith('Token is burned or owned by the sender');
-    });
-
     it('should fail to bid with invalid duration', async () => {
       await expect(
-        bidContract.placeBid(nftContract.address, 1, 1, {
+        bidContract.placeBid(nftContract.address, 1, {
           value: ethers.utils.parseUnits('0.5'),
         })
       ).to.be.revertedWith('Bid duration too short');
 
       await expect(
-        bidContract.placeBid(nftContract.address, 1, 9999999999, {
+        bidContract.placeBid(nftContract.address, 9999999999, {
           value: ethers.utils.parseUnits('0.5'),
         })
       ).to.be.revertedWith('Bid duration too long');
@@ -174,7 +158,7 @@ describe('Bid', function () {
       await bidContract.pause();
 
       await expect(
-        bidContract.placeBid(nftContract.address, 1, 1000, {
+        bidContract.placeBid(nftContract.address, 1000, {
           value: ethers.utils.parseUnits('0.5'),
         })
       ).to.be.revertedWith('Pausable: paused');
@@ -185,22 +169,21 @@ describe('Bid', function () {
     beforeEach(deploy);
 
     it('should be able to cancel bid', async () => {
-      await bidContract.placeBid(nftContract.address, 1, 1000, {
+      await bidContract.placeBid(nftContract.address, 1000, {
         value: ethers.utils.parseUnits('0.5'),
       });
 
       const activeBid = await bidContract.getBidByBidder(
         nftContract.address,
-        1,
         owner.address
       );
 
       const ownerBalance1 = await owner.getBalance();
-      const cancelTx = await bidContract.cancelBid(nftContract.address, 1);
+      const cancelTx = await bidContract.cancelBid(nftContract.address);
 
       await expect(cancelTx)
         .to.emit(bidContract, 'BidCancelled')
-        .withArgs(activeBid.bidId, nftContract.address, 1, owner.address);
+        .withArgs(activeBid.bidId, nftContract.address, owner.address);
 
       const ownerBalance2 = await owner.getBalance();
       expect(ownerBalance2.sub(ownerBalance1)).to.be.closeTo(
@@ -209,21 +192,21 @@ describe('Bid', function () {
       );
 
       await expect(
-        bidContract.getBidByBidder(nftContract.address, 1, owner.address)
+        bidContract.getBidByBidder(nftContract.address, owner.address)
       ).to.be.revertedWith('Invalid index');
     });
 
     it('should not be able to cancel other bids', async () => {
-      await bidContract.placeBid(nftContract.address, 1, 1000, {
+      await bidContract.placeBid(nftContract.address, 1000, {
         value: ethers.utils.parseUnits('0.5'),
       });
 
-      await bidContract.connect(user2).placeBid(nftContract.address, 1, 1000, {
+      await bidContract.connect(user2).placeBid(nftContract.address, 1000, {
         value: ethers.utils.parseUnits('0.3'),
       });
 
       const ownerBalance1 = await owner.getBalance();
-      await bidContract.cancelBid(nftContract.address, 1);
+      await bidContract.cancelBid(nftContract.address);
 
       const ownerBalance2 = await owner.getBalance();
       expect(ownerBalance2.sub(ownerBalance1)).to.be.closeTo(
@@ -232,12 +215,11 @@ describe('Bid', function () {
       );
 
       await expect(
-        bidContract.getBidByBidder(nftContract.address, 1, owner.address)
-      ).to.be.revertedWith('Bidder has not an active bid for this token');
+        bidContract.getBidByBidder(nftContract.address, owner.address)
+      ).to.be.revertedWith('Bidder has not an active bid for this collection');
 
       const activeBid = await bidContract.getBidByBidder(
         nftContract.address,
-        1,
         user2.address
       );
 
@@ -245,27 +227,27 @@ describe('Bid', function () {
     });
 
     it('should fail to cancel bid when paused', async () => {
-      await bidContract.placeBid(nftContract.address, 1, 1000, {
+      await bidContract.placeBid(nftContract.address, 1000, {
         value: ethers.utils.parseUnits('0.5'),
       });
 
       await bidContract.pause();
 
       await expect(
-        bidContract.cancelBid(nftContract.address, 1)
+        bidContract.cancelBid(nftContract.address)
       ).to.be.revertedWith('Pausable: paused');
     });
 
     it('should remove expired bid', async () => {
-      await bidContract.placeBid(nftContract.address, 1, 100, {
+      await bidContract.placeBid(nftContract.address, 100, {
         value: ethers.utils.parseUnits('0.5'),
       });
 
-      await bidContract.connect(user2).placeBid(nftContract.address, 2, 100, {
+      await bidContract.connect(user2).placeBid(nftContract.address, 100, {
         value: ethers.utils.parseUnits('0.5'),
       });
 
-      await bidContract.connect(user2).placeBid(nftContract.address, 1, 500, {
+      await bidContract.connect(user2).placeBid(nftContract2.address, 500, {
         value: ethers.utils.parseUnits('0.4'),
       });
 
@@ -274,21 +256,19 @@ describe('Bid', function () {
 
       await bidContract.removeExpiredBids(
         [nftContract.address, nftContract.address],
-        [1, 2],
         [owner.address, user2.address]
       );
 
       await expect(
-        bidContract.getBidByBidder(nftContract.address, 1, owner.address)
-      ).to.be.revertedWith('Bidder has not an active bid for this token');
+        bidContract.getBidByBidder(nftContract.address, owner.address)
+      ).to.be.revertedWith('Invalid index');
 
       await expect(
-        bidContract.getBidByBidder(nftContract.address, 2, user2.address)
+        bidContract.getBidByBidder(nftContract.address, user2.address)
       ).to.be.revertedWith('Invalid index');
 
       const bid = await bidContract.getBidByBidder(
-        nftContract.address,
-        1,
+        nftContract2.address,
         user2.address
       );
 
@@ -309,14 +289,17 @@ describe('Bid', function () {
       // owner will get 0.39 eth
       // total fee is 0.125
       // total fee after master key cut is 0.11875
-      await bidContract.placeBid(nftContract.address, 1, 1000000, {
+      await bidContract.placeBid(nftContract.address, 1000000, {
         value: ethers.utils.parseUnits('0.515'),
       });
 
       const user1Balance1 = await user1.getBalance();
+      const feeBalance1 = await nftContract.provider.getBalance(
+        '0x1D96e9bA0a7c1fdCEB33F3f4C71ca9117FfbE5CD'
+      );
 
       const bidId = (
-        await bidContract.getBidByToken(nftContract.address, 1, 0)
+        await bidContract.getBidByCollection(nftContract.address, 0)
       )[0];
 
       const transferTx = await safeTransferWithBytes(
@@ -340,7 +323,9 @@ describe('Bid', function () {
         );
 
       const user1Balance2 = await user1.getBalance();
-
+      const feeBalance2 = await nftContract.provider.getBalance(
+        '0x1D96e9bA0a7c1fdCEB33F3f4C71ca9117FfbE5CD'
+      );
       expect(user1Balance2.sub(user1Balance1)).to.be.closeTo(
         ethers.utils.parseUnits('0.39'),
         ethers.utils.parseUnits('0.001') //gas
@@ -348,24 +333,22 @@ describe('Bid', function () {
 
       expect(await nftContract.ownerOf(1)).to.equal(owner.address);
 
-      const feeBalance = await nftContract.provider.getBalance(
-        '0x1D96e9bA0a7c1fdCEB33F3f4C71ca9117FfbE5CD'
+      expect(feeBalance2.sub(feeBalance1)).to.equal(
+        ethers.utils.parseUnits('0.11875')
       );
-
-      expect(feeBalance).to.equal(ethers.utils.parseUnits('0.11875'));
     });
 
-    it('should fail to accept bid for other token', async () => {
-      await bidContract.placeBid(nftContract.address, 1, 1000000, {
+    it('should fail to accept bid for other collection', async () => {
+      await bidContract.placeBid(nftContract.address, 1000000, {
         value: ethers.utils.parseUnits('0.515'),
       });
 
-      await bidContract.placeBid(nftContract.address, 2, 1000000, {
+      await bidContract.placeBid(nftContract2.address, 1000000, {
         value: ethers.utils.parseUnits('0.115'),
       });
 
       const bidId = (
-        await bidContract.getBidByToken(nftContract.address, 1, 0)
+        await bidContract.getBidByCollection(nftContract2.address, 0)
       )[0];
 
       await expect(
@@ -374,22 +357,23 @@ describe('Bid', function () {
           user1,
           user1.address,
           bidContract.address,
-          2,
+          1,
           bidId
         )
       ).to.be.revertedWith('Invalid bid');
     });
+
     it('should not charge maker fee if seller is owner of master nft', async () => {
       await masterNftContract.mintNFT(user1.address);
 
-      await bidContract.placeBid(nftContract.address, 1, 1000000, {
+      await bidContract.placeBid(nftContract.address, 1000000, {
         value: ethers.utils.parseUnits('0.515'),
       });
 
       const user1Balance1 = await user1.getBalance();
 
       const bidId = (
-        await bidContract.getBidByToken(nftContract.address, 1, 0)
+        await bidContract.getBidByCollection(nftContract.address, 0)
       )[0];
 
       const feeBalanceBefore = await nftContract.provider.getBalance(
@@ -424,14 +408,14 @@ describe('Bid', function () {
     it('should not charge taker fee if buyer is owner of master nft', async () => {
       await masterNftContract.mintNFT(owner.address);
 
-      await bidContract.placeBid(nftContract.address, 1, 1000000, {
+      await bidContract.placeBid(nftContract.address, 1000000, {
         value: ethers.utils.parseUnits('0.5'),
       });
 
       const user1Balance1 = await user1.getBalance();
 
       const bidId = (
-        await bidContract.getBidByToken(nftContract.address, 1, 0)
+        await bidContract.getBidByCollection(nftContract.address, 0)
       )[0];
 
       const feeBalanceBefore = await nftContract.provider.getBalance(
@@ -467,7 +451,7 @@ describe('Bid', function () {
       await masterNftContract.mintNFT(owner.address);
       await masterNftContract.mintNFT(user1.address);
 
-      await bidContract.placeBid(nftContract.address, 1, 1000000, {
+      await bidContract.placeBid(nftContract.address, 1000000, {
         value: ethers.utils.parseUnits('0.5'),
       });
 
@@ -477,7 +461,7 @@ describe('Bid', function () {
       );
 
       const bidId = (
-        await bidContract.getBidByToken(nftContract.address, 1, 0)
+        await bidContract.getBidByCollection(nftContract.address, 0)
       )[0];
 
       await safeTransferWithBytes(
@@ -515,12 +499,12 @@ describe('Bid', function () {
         .addDistributor(bidContract.address);
 
       // Create auction and buy NFT
-      await bidContract.placeBid(nftContract.address, 1, 1000000, {
+      await bidContract.placeBid(nftContract.address, 1000000, {
         value: ethers.utils.parseUnits('1.03'),
       });
 
       const bidId = (
-        await bidContract.getBidByToken(nftContract.address, 1, 0)
+        await bidContract.getBidByCollection(nftContract.address, 0)
       )[0];
 
       const transferTx = await safeTransferWithBytes(
@@ -578,7 +562,7 @@ describe('Bid', function () {
       // owner will get 0.34 eth
       // total fee is 0.125
       // total fee after master key cut is 0.11875
-      await bidContract.placeBid(nftContract.address, 1, 1000000, {
+      await bidContract.placeBid(nftContract.address, 1000000, {
         value: ethers.utils.parseUnits('0.515'),
       });
 
@@ -589,7 +573,7 @@ describe('Bid', function () {
       const royaltiesRecipientBalance1 = await royaltiesRecipient.getBalance();
 
       const bidId = (
-        await bidContract.getBidByToken(nftContract.address, 1, 0)
+        await bidContract.getBidByCollection(nftContract.address, 0)
       )[0];
 
       const transferTx = await safeTransferWithBytes(

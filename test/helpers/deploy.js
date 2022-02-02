@@ -177,6 +177,30 @@ const deployBid = async (
   return bidContract;
 };
 
+const deployCollectionBid = async (
+  deployer,
+  feeProviderAddress,
+  royaltiesProviderAddress,
+  masterNFTAddress
+) => {
+  const CollectionBid = await ethers.getContractFactory('CollectionBid');
+  const collectionBidContract = await upgrades.deployProxy(
+    CollectionBid,
+    [
+      feeProviderAddress,
+      masterNFTAddress,
+      royaltiesProviderAddress,
+      '0x1D96e9bA0a7c1fdCEB33F3f4C71ca9117FfbE5CD',
+    ],
+    {
+      deployer,
+      initializer: '__CollectionBid_init',
+    }
+  );
+  await collectionBidContract.deployed();
+  return collectionBidContract;
+};
+
 const deployRoyaltiesProvider = async (deployer) => {
   const RoyaltiesProvider = await ethers.getContractFactory(
     'RoyaltiesProvider'
@@ -243,6 +267,7 @@ module.exports = {
   deployMarketplaceWithDeps,
   deployEndemicMasterNFT,
   deployBid,
+  deployCollectionBid,
   deployEndemic,
   deployEndemicTokenMining,
   deployEndemicVesting,
