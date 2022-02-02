@@ -5,7 +5,7 @@ const aurora_testnet = {
   royaltiesProviderProxy: '0xe34Ec7b3A3aB22B2422a37ad6726E7A76e5C2787',
   endemicNftProxy: '0x599F825A6cBAdA1c8eB972F2ebb6780576d11B96',
   endemicCollection: '0x1F081B956f670D0fbf6d02b0439e802540bA1aBD',
-  marketplaceProxy: '0xDd29A2E65c01B75d74A53a469bF90371697846BF',
+  marketplaceProxy: '0x74f43bE6944154CF4da1731E3ad472dFe34E372B',
   endemicNftBeacon: '0xaFf28326DB64f2f02a7788A047E525B047c0A525',
   endemicNftFactory: '0xFe7F3f28b5963b5447ECb37F1d9710f453BDFB21',
   bidProxy: '0x247001fBCE8166ECDeD545a1a52E52041838f87C',

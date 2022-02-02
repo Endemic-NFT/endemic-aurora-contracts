@@ -33,13 +33,12 @@ describe('EndemicNFT', function () {
         .connect(owner)
         .mint(
           user.address,
-          user2.address,
           'bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi'
         );
 
       await expect(mintTx)
         .to.emit(lazyNftContract, 'Mint')
-        .withArgs(tokenId.toString(), user2.address);
+        .withArgs(tokenId.toString(), owner.address);
 
       const nftOwnerAddress = await lazyNftContract.ownerOf(tokenId);
       expect(nftOwnerAddress).to.equal(user.address);
@@ -61,13 +60,12 @@ describe('EndemicNFT', function () {
         .connect(user)
         .mint(
           user.address,
-          user2.address,
           'bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi'
         );
 
       await expect(mintTx)
         .to.emit(lazyNftContract, 'Mint')
-        .withArgs(tokenId.toString(), user2.address);
+        .withArgs(tokenId.toString(), owner.address);
 
       const nftOwnerAddress = await lazyNftContract.ownerOf(tokenId);
       expect(nftOwnerAddress).to.equal(user.address);
@@ -84,7 +82,6 @@ describe('EndemicNFT', function () {
           .connect(user)
           .mint(
             user.address,
-            user2.address,
             'bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi'
           )
       ).to.be.revertedWith('mint caller is not owner nor approved');
@@ -101,7 +98,6 @@ describe('EndemicNFT', function () {
         .connect(user)
         .mint(
           user.address,
-          user2.address,
           'bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi'
         );
 
@@ -111,7 +107,6 @@ describe('EndemicNFT', function () {
         .connect(user)
         .mint(
           user.address,
-          user2.address,
           'bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi'
         );
 
