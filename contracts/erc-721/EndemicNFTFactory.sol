@@ -11,11 +11,9 @@ import "./EndemicNFT.sol";
 contract EndemicNFTFactory is AccessControl, Pausable {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     IBeacon public beacon;
-    address marketplaceContract;
 
-    constructor(IBeacon _beacon, address _marketplaceContract) {
+    constructor(IBeacon _beacon) {
         beacon = _beacon;
-        marketplaceContract = _marketplaceContract;
 
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     }
@@ -43,13 +41,6 @@ contract EndemicNFTFactory is AccessControl, Pausable {
         string baseURI;
     }
 
-    function setMarketplaceContract(address _marketplaceContract)
-        external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
-        marketplaceContract = _marketplaceContract;
-    }
-
     function createToken(DeployParams calldata params)
         external
         whenNotPaused
@@ -64,7 +55,6 @@ contract EndemicNFTFactory is AccessControl, Pausable {
 
         BeaconProxy beaconProxy = new BeaconProxy(address(beacon), data);
         EndemicNFT endemicNft = EndemicNFT(address(beaconProxy));
-        endemicNft.setDefaultApproval(marketplaceContract, true);
         endemicNft.transferOwnership(_msgSender());
 
         emit NFTContractCreated(
@@ -90,7 +80,6 @@ contract EndemicNFTFactory is AccessControl, Pausable {
 
         BeaconProxy beaconProxy = new BeaconProxy(address(beacon), data);
         EndemicNFT endemicNft = EndemicNFT(address(beaconProxy));
-        endemicNft.setDefaultApproval(marketplaceContract, true);
         endemicNft.transferOwnership(params.owner);
 
         emit NFTContractCreated(

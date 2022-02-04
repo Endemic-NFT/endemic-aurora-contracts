@@ -4,7 +4,6 @@ const Web3 = require('web3');
 const {
   deployEndemicNFT,
   deployEndemicERC1155,
-  deployMarketplaceWithDeps,
   deployEndemicMasterNFT,
 } = require('../helpers/deploy');
 
@@ -17,8 +16,6 @@ describe('EndemicERC1155Factory', function () {
     [owner, user, signer] = await ethers.getSigners();
 
     const masterNftContract = await deployEndemicMasterNFT(owner);
-    const { marketplace } = await deployMarketplaceWithDeps(owner);
-
     const implContract = await deployEndemicERC1155(owner, signer.address);
     // beacon
     const EndemicERC1155Beacon = await ethers.getContractFactory(
@@ -31,10 +28,7 @@ describe('EndemicERC1155Factory', function () {
       'EndemicERC1155Factory'
     );
 
-    factoryContract = await EndemicERC1155Factory.deploy(
-      beacon.address,
-      marketplace.address
-    );
+    factoryContract = await EndemicERC1155Factory.deploy(beacon.address);
     await factoryContract.deployed();
   });
 

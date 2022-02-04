@@ -34,15 +34,6 @@ abstract contract ERC721Base is
         return super.tokenURI(tokenId);
     }
 
-    function isApprovedForAll(address _owner, address _operator)
-        public
-        view
-        override(ERC721DefaultApproval, ERC721Upgradeable)
-        returns (bool)
-    {
-        return ERC721DefaultApproval.isApprovedForAll(_owner, _operator);
-    }
-
     function supportsInterface(bytes4 interfaceId)
         public
         view
@@ -70,16 +61,6 @@ abstract contract ERC721Base is
 
     function _setBaseURI(string memory baseTokenURI) internal {
         baseURI = baseTokenURI;
-    }
-
-    function _isApprovedOrOwner(address spender, uint256 tokenId)
-        internal
-        view
-        virtual
-        override(ERC721Upgradeable, ERC721DefaultApproval)
-        returns (bool)
-    {
-        return ERC721DefaultApproval._isApprovedOrOwner(spender, tokenId);
     }
 
     function _beforeTokenTransfer(

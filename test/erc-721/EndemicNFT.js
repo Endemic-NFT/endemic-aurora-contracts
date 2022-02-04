@@ -49,12 +49,12 @@ describe('EndemicNFT', function () {
       );
     });
 
-    it('should mint an NFT if approved for all', async function () {
+    it('should mint an NFT if default approval', async function () {
       const tokenId = 1;
 
       await lazyNftContract
         .connect(owner)
-        .setApprovalForAll(user.address, true);
+        .setDefaultApproval(user.address, true);
 
       const mintTx = await lazyNftContract
         .connect(user)
@@ -92,7 +92,7 @@ describe('EndemicNFT', function () {
 
       await lazyNftContract
         .connect(owner)
-        .setApprovalForAll(user.address, true);
+        .setDefaultApproval(user.address, true);
 
       await lazyNftContract
         .connect(user)
@@ -120,12 +120,5 @@ describe('EndemicNFT', function () {
 
       expect(await lazyNftContract.totalSupply()).to.equal('1');
     });
-  });
-
-  it('sets default approver', async () => {
-    await lazyNftContract.setDefaultApproval(user.address, true);
-    expect(
-      await lazyNftContract.isApprovedForAll(owner.address, user.address)
-    ).to.equal(true);
   });
 });

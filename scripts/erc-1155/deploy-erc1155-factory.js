@@ -3,18 +3,17 @@ const { getForNetwork } = require('../utils/addresses');
 
 async function main() {
   const [deployer] = await ethers.getSigners();
-  const { endemicERC1155Beacon, marketplaceProxy } = getForNetwork(
-    network.name
-  );
+  const { endemicERC1155Beacon } = getForNetwork(network.name);
 
   console.log(
     'Deploying EndemicERC1155Factory with the account:',
     deployer.address
   );
-  const EndemicERC1155Factory = await ethers.getContractFactory('EndemicERC1155Factory');
+  const EndemicERC1155Factory = await ethers.getContractFactory(
+    'EndemicERC1155Factory'
+  );
   const endemicERC1155Factory = await EndemicERC1155Factory.deploy(
-    endemicERC1155Beacon,
-    marketplaceProxy
+    endemicERC1155Beacon
   );
   await endemicERC1155Factory.deployed();
   console.log(

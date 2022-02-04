@@ -31,7 +31,7 @@ contract EndemicNFT is ERC721Base {
         returns (bool)
     {
         require(
-            _msgSender() == owner() || isApprovedForAll(owner(), _msgSender()),
+            _msgSender() == owner() || _isDefaultApproval(_msgSender()),
             "mint caller is not owner nor approved"
         );
 

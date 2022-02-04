@@ -90,21 +90,6 @@ describe('EndemicERC1155', function () {
       ).to.equal('5');
     });
 
-    it('should mint an NFT if approved for all', async function () {
-      await nftContract.connect(owner).setApprovalForAll(user.address, true);
-
-      const mintTx = await nftContract.connect(user).mint({
-        recipient: user.address,
-        tokenId: 1,
-        amount: 5,
-      });
-
-      const tokenUri = await nftContract.uri(1);
-      expect(tokenUri).to.equal(
-        'ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi'
-      );
-    });
-
     it('should fail to mint an NFT if not owner', async function () {
       await expect(
         nftContract.connect(user).mint({
@@ -124,12 +109,5 @@ describe('EndemicERC1155', function () {
         })
       ).to.be.revertedWith('supply incorrect');
     });
-  });
-
-  it('sets default approver', async () => {
-    await nftContract.setDefaultApproval(user.address, true);
-    expect(
-      await nftContract.isApprovedForAll(owner.address, user.address)
-    ).to.equal(true);
   });
 });

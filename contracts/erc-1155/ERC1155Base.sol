@@ -5,12 +5,10 @@ import "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155Burn
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
-import "./ERC1155DefaultApproval.sol";
 import "./ERC1155BaseURI.sol";
 
 abstract contract ERC1155Base is
     Initializable,
-    ERC1155DefaultApproval,
     ERC1155BurnableUpgradeable,
     ERC1155BaseURI,
     OwnableUpgradeable
@@ -62,24 +60,8 @@ abstract contract ERC1155Base is
         return _tokenURI(id);
     }
 
-    function setDefaultApproval(address operator, bool hasApproval)
-        external
-        onlyOwner
-    {
-        _setDefaultApproval(operator, hasApproval);
-    }
-
     function setBaseTokenURI(string memory baseTokenURI) public onlyOwner {
         _setBaseURI(baseTokenURI);
-    }
-
-    function isApprovedForAll(address _owner, address _operator)
-        public
-        view
-        override(ERC1155DefaultApproval, ERC1155Upgradeable)
-        returns (bool)
-    {
-        return ERC1155DefaultApproval.isApprovedForAll(_owner, _operator);
     }
 
     uint256[50] private __gap;
