@@ -4,6 +4,7 @@ require('@openzeppelin/hardhat-upgrades');
 require('hardhat-contract-sizer');
 require('hardhat-gas-reporter');
 require('solidity-coverage');
+require('@ericxstone/hardhat-blockscout-verify');
 require('dotenv').config();
 
 /**
@@ -38,10 +39,21 @@ module.exports = {
   },
   gasReporter: {
     currency: 'USD',
-    gasPrice: 100,
+    gasPrice: 0.1,
     coinmarketcap: process.env.COINMARKETCAP_API_KEY,
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
+  },
+  blockscoutVerify: {
+    blockscoutURL: 'https://explorer.mainnet.aurora.dev',
+    contracts: {
+      FeeProvider: {
+        compilerVersion: '0.8.4', // checkout enum SOLIDITY_VERSION
+        optimization: true,
+        evmVersion: 'default', // checkout enum SOLIDITY_VERSION
+        optimizationRuns: 999999,
+      },
+    },
   },
 };
