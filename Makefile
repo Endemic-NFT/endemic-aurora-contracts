@@ -77,7 +77,3 @@ deployERC1155Beacon:
 .PHONY: deployERC1155Factory
 deployERC1155Factory:
 	npx hardhat run scripts/erc-1155/deploy-erc1155-factory.js --network ${network}
-
-.PHONY: verifyCode
-verifyCode:
-	npx hardhat blockscout-verify --network ${network} ${contractPath} ${address}
