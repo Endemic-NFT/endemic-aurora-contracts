@@ -36,6 +36,10 @@ module.exports = {
       gasPrice: 0,
       timeout: 80000,
     },
+    rinkeby: {
+      url: `https://eth-rinkeby.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
+      accounts: [process.env.PRIVATE_KEY],
+    },
   },
   gasReporter: {
     currency: 'USD',

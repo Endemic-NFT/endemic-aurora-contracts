@@ -22,13 +22,9 @@ deployFeeProvider:
 deployRoyaltiesProvider:
 	npx hardhat run scripts/royalties-provider/deploy-royalties-provider.js --network ${network}
 
-.PHONY: deployInitialErc721
-deployInitialErc721:
-	npx hardhat run scripts/erc-721/deploy-erc721-initial.js --network ${network}
-
-.PHONY: deployEndemicCollection
-deployEndemicCollection:
-	npx hardhat run scripts/erc-721/deploy-endemic-erc721.js --network ${network}
+.PHONY: deployErc721
+deployErc721:
+	npx hardhat run scripts/erc-721/deploy-erc721.js --network ${network}
 
 .PHONY: deployMarketplace
 deployMarketplace:
