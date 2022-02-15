@@ -8,25 +8,25 @@
     "coverage": "npx hardhat coverage --network hardhat"
   },
   "dependencies": {
-    "@nomiclabs/hardhat-etherscan": "^3.0.0",
-    "@openzeppelin/contracts": "4.4.2",
-    "@openzeppelin/contracts-upgradeable": "^4.4.2",
+    "@nomiclabs/hardhat-etherscan": "^3.0.1",
+    "@openzeppelin/contracts": "4.5.0",
+    "@openzeppelin/contracts-upgradeable": "^4.5.1",
     "@openzeppelin/hardhat-upgrades": "^1.12.1",
     "dotenv": "10.0.0",
     "ethers": "^5.5.4",
-    "hardhat": "^2.8.3",
+    "hardhat": "^2.8.4",
     "hardhat-gas-reporter": "^1.0.7",
-    "web3": "1.5.3"
+    "web3": "1.7.0"
   },
   "devDependencies": {
-    "@nomiclabs/hardhat-ethers": "^2.0.4",
+    "@nomiclabs/hardhat-ethers": "^2.0.5",
     "@nomiclabs/hardhat-waffle": "^2.0.2",
     "chai": "^4.3.6",
     "ethereum-waffle": "^3.4.0",
     "hardhat-contract-sizer": "^2.4.0",
     "prettier": "^2.4.1",
     "prettier-plugin-solidity": "^1.0.0-beta.19",
-    "solidity-coverage": "^0.7.18"
+    "solidity-coverage": "^0.7.19"
   },
   "compilers": {
     "solc": {
