@@ -18,13 +18,6 @@
   resolved "https://registry.yarnpkg.com/@ensdomains/resolver/-/resolver-0.2.4.tgz#c10fe28bf5efbf49bff4666d909aed0265efbc89"
   integrity sha512-bvaTH34PMCbv6anRa9I/0zjLJgY4EuznbEMgbV77JBCQ9KNC46rzi0avuxpOfu+xDjPEtSFGqVEOr5GlUSGudA==
 
-"@ericxstone/hardhat-blockscout-verify@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@ericxstone/hardhat-blockscout-verify/-/hardhat-blockscout-verify-1.0.0.tgz#e9d845765dc37f775cd36d95182c46cc4233ebf7"
-  integrity sha512-YGErQnwWhpznamKpf5XjzNPhcxZIi+cKUnYSEj63UQsPjYcg1/0FY/b4dPJGkoE+7bXTJrfNiR5DEMxiYh1pIw==
-  dependencies:
-    node-fetch "2.0.0"
-
 "@ethereum-waffle/chai@^3.4.0":
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/@ethereum-waffle/chai/-/chai-3.4.0.tgz#2477877410a96bf370edd64df905b04fb9aba9d5"
@@ -543,10 +536,10 @@
   resolved "https://registry.yarnpkg.com/@nomiclabs/hardhat-ethers/-/hardhat-ethers-2.0.4.tgz#288889c338acaf47cabd29020e561d0077b7efcf"
   integrity sha512-7LMR344TkdCYkMVF9LuC9VU2NBIi84akQiwqm7OufpWaDgHbWhuanY53rk3SVAW0E4HBk5xn5wl5+bN5f+Mq5w==
 
-"@nomiclabs/hardhat-etherscan@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@nomiclabs/hardhat-etherscan/-/hardhat-etherscan-3.0.0.tgz#06e0d59787f01f1296d829e8d43fece50e7ffff1"
-  integrity sha512-E5s35dCHmzuY6pFqlgTdDGQr2xIyUJ3f91m6e7HYlPGz0FGzad9Nem/y0L7L3FHG4LPYg1UObkQVUzqBjtyAOA==
+"@nomiclabs/hardhat-etherscan@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@nomiclabs/hardhat-etherscan/-/hardhat-etherscan-3.0.1.tgz#25013e464451e75273736eada6473d98be56c283"
+  integrity sha512-ZeDMqUvbmWGSpsCkyD7QOsJ3lytNgmoOPpglOtgCfoIewb1o2Nz1PgofWYsSdIiWBtIN9rBF8ldU2jVpgsNhHg==
   dependencies:
     "@ethersproject/abi" "^5.1.2"
     "@ethersproject/address" "^5.0.2"
@@ -6009,11 +6002,6 @@ node-environment-flags@1.0.6:
   dependencies:
     object.getownpropertydescriptors "^2.0.3"
     semver "^5.7.0"
-
-node-fetch@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.0.0.tgz#982bba43ecd4f2922a29cc186a6bbb0bb73fcba6"
-  integrity sha1-mCu6Q+zU8pIqKcwYamu7C7c/y6Y=
 
 node-fetch@2.1.2:
   version "2.1.2"
