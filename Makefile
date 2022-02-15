@@ -46,6 +46,10 @@ deployFactory:
 deployBid:
 	npx hardhat run scripts/bid/deploy-bid.js --network ${network}
 
+.PHONY: deployCollectionBid
+deployCollectionBid:
+	npx hardhat run scripts/bid/deploy-collection-bid.js --network ${network}
+
 .PHONY: upgradeErc721
 upgradeErc721:
 	npx hardhat run scripts/erc-721/upgrade-erc721-proxy.js --network ${network}

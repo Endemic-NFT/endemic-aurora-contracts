@@ -11,7 +11,7 @@ const aurora_testnet = {
   bidProxy: '0x247001fBCE8166ECDeD545a1a52E52041838f87C',
   contractImporter: '0x44317C983Ada8176801B40f98650cf1A1c3E4DcC',
   artMinter: '0xa82aF2fb626752171e8BeC3c652fB881EB9297db',
-
+  collectionBidProxy: '0x35eAfaf3A839DEa11Df7f3dbb573E261124f3CE3',
   endemicErc20: '',
 
   endemicERC1155Proxy: '',
@@ -32,7 +32,7 @@ const aurora = {
   bidProxy: '',
   contractImporter: '0x427f522121534EB79d40Cbeeb5C62e172c05979d',
   artMinter: '0x6B7340fDd8974b3fa275C51Fb5074f8774dC8d8f',
-
+  collectionBidProxy: ''
   endemicErc20: '',
 
   endemicERC1155Proxy: '',
