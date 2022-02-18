@@ -15,7 +15,7 @@ module.exports = {
     settings: {
       optimizer: {
         enabled: true,
-        runs: 1000,
+        runs: 200,
       },
     },
   },
@@ -42,7 +42,7 @@ module.exports = {
   },
   gasReporter: {
     currency: 'USD',
-    gasPrice: 0.1,
+    gasPrice: 100,
     coinmarketcap: process.env.COINMARKETCAP_API_KEY,
   },
   etherscan: {

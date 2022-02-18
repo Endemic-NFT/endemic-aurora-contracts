@@ -8,7 +8,6 @@ const {
 
 describe('EndemicNFTFactory', function () {
   let factoryContract = null;
-  let EndemicLazyNFT = null;
   let owner, user, signer;
 
   beforeEach(async function () {
@@ -68,8 +67,8 @@ describe('EndemicNFTFactory', function () {
     );
 
     const tx = await factoryContract.connect(user).createToken({
-      name: 'Lazy #1',
-      symbol: 'LZ',
+      name: 'My Collection',
+      symbol: 'MC',
       category: 'Art',
       baseURI: 'ipfs://',
     });
@@ -82,16 +81,16 @@ describe('EndemicNFTFactory', function () {
 
     expect(newAddress).to.properAddress;
     expect(contractOwner).to.equal(user.address);
-    expect(name).to.equal('Lazy #1');
-    expect(symbol).to.equal('LZ');
+    expect(name).to.equal('My Collection');
+    expect(symbol).to.equal('MC');
     expect(category).to.equal('Art');
   });
 
   it('should fail to deploy a new contract if not minter', async function () {
     await expect(
       factoryContract.connect(user).createToken({
-        name: 'Lazy #1',
-        symbol: 'LZ',
+        name: 'My Collection',
+        symbol: 'MC',
         category: 'Art',
         baseURI: 'ipfs://',
       })
@@ -101,8 +100,8 @@ describe('EndemicNFTFactory', function () {
   it('should deploy new contract for owner if admin', async () => {
     const tx = await factoryContract.connect(owner).createTokenForOwner({
       owner: user.address,
-      name: 'Lazy #1',
-      symbol: 'LZ',
+      name: 'My Collection',
+      symbol: 'MC',
       category: 'Art',
       baseURI: 'ipfs://',
     });
@@ -115,8 +114,8 @@ describe('EndemicNFTFactory', function () {
 
     expect(newAddress).to.properAddress;
     expect(contractOwner).to.equal(user.address);
-    expect(name).to.equal('Lazy #1');
-    expect(symbol).to.equal('LZ');
+    expect(name).to.equal('My Collection');
+    expect(symbol).to.equal('MC');
     expect(category).to.equal('Art');
   });
 
@@ -124,8 +123,8 @@ describe('EndemicNFTFactory', function () {
     await expect(
       factoryContract.connect(user).createTokenForOwner({
         owner: user.address,
-        name: 'Lazy #1',
-        symbol: 'LZ',
+        name: 'My Collection',
+        symbol: 'MC',
         category: 'Art',
         baseURI: 'ipfs://',
       })

@@ -1,6 +1,6 @@
 {
-  "name": "endemic-contracts",
-  "license": "ISC",
+  "name": "endemic-aurora-contracts",
+  "license": "MIT",
   "scripts": {
     "compile": "npx hardhat compile",
     "test": "npx hardhat test",

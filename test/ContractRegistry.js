@@ -1,13 +1,7 @@
 const { expect } = require('chai');
 const { ethers, network, upgrades } = require('hardhat');
 const BN = require('bignumber.js');
-const {
-  deployEndemicNFT,
-  deployBid,
-  deployEndemicMasterNFT,
-  deployContractRegistry,
-  deployFeeProvider,
-} = require('./helpers/deploy');
+const { deployContractRegistry } = require('./helpers/deploy');
 
 describe('ContractRegistry', function () {
   let contractRegistryContract;

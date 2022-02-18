@@ -91,8 +91,6 @@ abstract contract CollectionBidCore is PausableUpgradeable, OwnableUpgradeable {
     {
         require(msg.value > 0, "Invalid value sent");
 
-        IERC721 nft = IERC721(nftContract);
-
         require(duration >= MIN_BID_DURATION, "Bid duration too short");
         require(duration <= MAX_BID_DURATION, "Bid duration too long");
 
