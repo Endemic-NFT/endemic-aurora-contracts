@@ -16,16 +16,12 @@ const deployEndemicVesting = async (
   return endemicVesting;
 };
 
-const deployEndemicTokenMining = async (endemicTokenAddress) => {
-  const EndemicTokenMining = await ethers.getContractFactory(
-    'EndemicTokenMining'
-  );
+const deployEndemicRewards = async (endemicTokenAddress) => {
+  const EndemicRewards = await ethers.getContractFactory('EndemicRewards');
 
-  const endemicTokenMining = await EndemicTokenMining.deploy(
-    endemicTokenAddress
-  );
-  await endemicTokenMining.deployed();
-  return endemicTokenMining;
+  const endemicRewards = await EndemicRewards.deploy(endemicTokenAddress);
+  await endemicRewards.deployed();
+  return endemicRewards;
 };
 
 const deployEndemicToken = async (deployer) => {
@@ -269,7 +265,7 @@ module.exports = {
   deployBid,
   deployCollectionBid,
   deployEndemic,
-  deployEndemicTokenMining,
+  deployEndemicRewards,
   deployEndemicVesting,
   deployEndemicERC1155,
   deployFeeProvider,

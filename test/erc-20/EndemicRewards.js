@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const { ethers } = require('hardhat');
 const {
   deployEndemicToken,
-  deployEndemicTokenMining,
+  deployEndemicRewards,
 } = require('../helpers/deploy');
 const { sign } = require('../helpers/sign');
 
@@ -14,7 +14,7 @@ describe('EndemicRewards', function () {
     [owner, user1, user2] = await ethers.getSigners();
 
     endemicToken = await deployEndemicToken(owner);
-    endemicTokenMining = await deployEndemicTokenMining(endemicToken.address);
+    endemicTokenMining = await deployEndemicRewards(endemicToken.address);
 
     await endemicToken.transfer(
       endemicTokenMining.address,
