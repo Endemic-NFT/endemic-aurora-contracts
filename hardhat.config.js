@@ -48,15 +48,4 @@ module.exports = {
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
   },
-  blockscoutVerify: {
-    blockscoutURL: 'https://explorer.mainnet.aurora.dev',
-    contracts: {
-      FeeProvider: {
-        compilerVersion: '0.8.4', // checkout enum SOLIDITY_VERSION
-        optimization: true,
-        evmVersion: 'default', // checkout enum SOLIDITY_VERSION
-        optimizationRuns: 999999,
-      },
-    },
-  },
 };
