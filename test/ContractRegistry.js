@@ -7,7 +7,7 @@ describe('ContractRegistry', function () {
   let contractRegistryContract;
   let owner, user1;
 
-  async function deploy(makerFee = 300, takerFee = 300, initialFee = 2200) {
+  async function deploy() {
     [owner, user1, saleContract] = await ethers.getSigners();
 
     contractRegistryContract = await deployContractRegistry(owner);
