@@ -4,7 +4,6 @@ require('@openzeppelin/hardhat-upgrades');
 require('hardhat-contract-sizer');
 require('hardhat-gas-reporter');
 require('solidity-coverage');
-require('@ericxstone/hardhat-blockscout-verify');
 require('dotenv').config();
 
 /**

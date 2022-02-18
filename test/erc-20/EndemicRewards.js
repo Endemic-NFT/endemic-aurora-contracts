@@ -6,7 +6,7 @@ const {
 } = require('../helpers/deploy');
 const { sign } = require('../helpers/sign');
 
-describe('EndemicTokenMining', function () {
+describe('EndemicRewards', function () {
   let owner, user1, user2;
   let endemicToken, endemicTokenMining;
 

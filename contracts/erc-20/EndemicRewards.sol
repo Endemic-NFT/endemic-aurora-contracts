@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract EndemicTokenMining is Ownable {
+contract EndemicRewards is Ownable {
     using SafeMath for uint256;
 
     event Claim(address indexed owner, uint256 value);
