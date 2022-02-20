@@ -8,7 +8,7 @@ describe('EndemicMasterNFT', function () {
   beforeEach(async function () {
     [owner, minter, user, ...otherSigners] = await ethers.getSigners();
 
-    masterNftContract = await deployEndemicMasterNFT(owner);
+    masterNftContract = await deployEndemicMasterNFT();
     await masterNftContract.addDistributor(owner.address);
   });
 

@@ -1,6 +1,5 @@
 const { expect } = require('chai');
-const { ethers, network, upgrades } = require('hardhat');
-const BN = require('bignumber.js');
+const { ethers } = require('hardhat');
 const {
   deployEndemicNFT,
   deployMarketplaceWithDeps,
@@ -34,7 +33,6 @@ describe('NftTrade', function () {
       await ethers.getSigners();
 
     const result = await deployMarketplaceWithDeps(
-      owner,
       makerFee,
       takerFee,
       initialFee
@@ -47,13 +45,12 @@ describe('NftTrade', function () {
     royaltiesProviderContract = result.royaltiesProviderContract;
 
     bid = await deployBid(
-      owner,
       feeProviderContract.address,
       royaltiesProviderContract.address,
       masterNftContract.address
     );
 
-    nftContract = await deployEndemicNFT(owner);
+    nftContract = await deployEndemicNFT();
 
     await contractRegistryContract.addSaleContract(marketplace.address);
     await contractRegistryContract.addSaleContract(bid.address);

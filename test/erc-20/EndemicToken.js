@@ -1,7 +1,6 @@
 const { expect } = require('chai');
 const { ethers } = require('hardhat');
 const { deployEndemicToken } = require('../helpers/deploy');
-const { signMessage } = require('../helpers/sign');
 
 describe('EndemicToken', function () {
   let user1, user2;

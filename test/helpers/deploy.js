@@ -1,21 +1,5 @@
 const { ethers, upgrades } = require('hardhat');
 
-const deployEndemicVesting = async (
-  deployer,
-  endemicTokenAddress,
-  multisigAddress
-) => {
-  const EndemicVesting = await ethers.getContractFactory('EndemicVesting');
-
-  const endemicVesting = await EndemicVesting.deploy(
-    endemicTokenAddress,
-    multisigAddress
-  );
-
-  await endemicVesting.deployed();
-  return endemicVesting;
-};
-
 const deployEndemicRewards = async (endemicTokenAddress) => {
   const EndemicRewards = await ethers.getContractFactory('EndemicRewards');
 
@@ -32,29 +16,12 @@ const deployEndemicToken = async (deployer) => {
   return endemicToken;
 };
 
-const deployEndemic = async (deployer, defaultSigner) => {
-  const Endemic = await ethers.getContractFactory('Endemic');
-
-  const endemic = await upgrades.deployProxy(
-    Endemic,
-    ['ipfs://', defaultSigner.address],
-    {
-      deployer,
-      initializer: '__Endemic_init',
-    }
-  );
-
-  await endemic.deployed();
-  return endemic;
-};
-
-const deployEndemicNFT = async (deployer) => {
+const deployEndemicNFT = async () => {
   const EndemicNFT = await ethers.getContractFactory('EndemicNFT');
   const nftContract = await upgrades.deployProxy(
     EndemicNFT,
     ['NftLazyTest', 'NFTL', 'ipfs://'],
     {
-      deployer,
       initializer: '__EndemicNFT_init',
     }
   );
@@ -62,13 +29,12 @@ const deployEndemicNFT = async (deployer) => {
   return nftContract;
 };
 
-const deployEndemicERC1155 = async (deployer) => {
+const deployEndemicERC1155 = async () => {
   const EndemicERC1155 = await ethers.getContractFactory('EndemicERC1155');
   const nftContract = await upgrades.deployProxy(
     EndemicERC1155,
     ['Endemic ERC 1155', 'ENDR', 'ipfs://'],
     {
-      deployer,
       initializer: '__EndemicERC1155_init',
     }
   );
@@ -77,7 +43,6 @@ const deployEndemicERC1155 = async (deployer) => {
 };
 
 const deployMarketplace = async (
-  deployer,
   feeProviderAddress,
   royaltiesProviderAddress,
   masterNFTAddress
@@ -92,7 +57,6 @@ const deployMarketplace = async (
       '0x1d1C46273cEcC00F7503AB3E97A40a199bcd6b31',
     ],
     {
-      deployer,
       initializer: '__Marketplace_init',
     }
   );
@@ -101,18 +65,16 @@ const deployMarketplace = async (
 };
 
 const deployMarketplaceWithDeps = async (
-  deployer,
   makerFee = 0,
   takerFee = 0,
   initialFee = 0
 ) => {
-  const contractRegistryContract = await deployContractRegistry(deployer);
-  const masterNftContract = await deployEndemicMasterNFT(deployer);
+  const contractRegistryContract = await deployContractRegistry();
+  const masterNftContract = await deployEndemicMasterNFT();
 
-  const royaltiesProviderContract = await deployRoyaltiesProvider(deployer);
+  const royaltiesProviderContract = await deployRoyaltiesProvider();
 
   const feeProviderContract = await deployFeeProvider(
-    deployer,
     masterNftContract.address,
     contractRegistryContract.address,
     makerFee,
@@ -120,7 +82,6 @@ const deployMarketplaceWithDeps = async (
     initialFee
   );
   const marketplace = await deployMarketplace(
-    deployer,
     feeProviderContract.address,
     royaltiesProviderContract.address,
     masterNftContract.address
@@ -135,13 +96,12 @@ const deployMarketplaceWithDeps = async (
   };
 };
 
-const deployEndemicMasterNFT = async (deployer) => {
+const deployEndemicMasterNFT = async () => {
   const EndemicMasterNFT = await ethers.getContractFactory('EndemicMasterNFT');
   const masterNftContract = await upgrades.deployProxy(
     EndemicMasterNFT,
     ['https://tokenbase.com/master/'],
     {
-      deployer,
       initializer: '__EndemicMasterNFT_init',
     }
   );
@@ -150,7 +110,6 @@ const deployEndemicMasterNFT = async (deployer) => {
 };
 
 const deployBid = async (
-  deployer,
   feeProviderAddress,
   royaltiesProviderAddress,
   masterNFTAddress
@@ -165,7 +124,6 @@ const deployBid = async (
       '0x1D96e9bA0a7c1fdCEB33F3f4C71ca9117FfbE5CD',
     ],
     {
-      deployer,
       initializer: '__Bid_init',
     }
   );
@@ -174,7 +132,6 @@ const deployBid = async (
 };
 
 const deployCollectionBid = async (
-  deployer,
   feeProviderAddress,
   royaltiesProviderAddress,
   masterNFTAddress
@@ -189,7 +146,6 @@ const deployCollectionBid = async (
       '0x1D96e9bA0a7c1fdCEB33F3f4C71ca9117FfbE5CD',
     ],
     {
-      deployer,
       initializer: '__CollectionBid_init',
     }
   );
@@ -197,7 +153,7 @@ const deployCollectionBid = async (
   return collectionBidContract;
 };
 
-const deployRoyaltiesProvider = async (deployer) => {
+const deployRoyaltiesProvider = async () => {
   const RoyaltiesProvider = await ethers.getContractFactory(
     'RoyaltiesProvider'
   );
@@ -205,7 +161,6 @@ const deployRoyaltiesProvider = async (deployer) => {
     RoyaltiesProvider,
     [],
     {
-      deployer,
       initializer: '__RoyaltiesProvider_init',
     }
   );
@@ -214,7 +169,6 @@ const deployRoyaltiesProvider = async (deployer) => {
 };
 
 const deployFeeProvider = async (
-  deployer,
   masterNFTAddress,
   contractRegistryAddress,
   makerFee = 250, // 2.5% maker fee
@@ -233,7 +187,6 @@ const deployFeeProvider = async (
       contractRegistryAddress,
     ],
     {
-      deployer,
       initializer: '__FeeProvider_init',
     }
   );
@@ -242,13 +195,12 @@ const deployFeeProvider = async (
   return feeProviderContract;
 };
 
-const deployContractRegistry = async (deployer) => {
+const deployContractRegistry = async () => {
   const ContractRegistry = await ethers.getContractFactory('ContractRegistry');
   const contractRegistryContracat = await upgrades.deployProxy(
     ContractRegistry,
     [],
     {
-      deployer,
       initializer: '__ContractRegistry_init',
     }
   );
@@ -264,9 +216,7 @@ module.exports = {
   deployEndemicMasterNFT,
   deployBid,
   deployCollectionBid,
-  deployEndemic,
   deployEndemicRewards,
-  deployEndemicVesting,
   deployEndemicERC1155,
   deployFeeProvider,
   deployContractRegistry,

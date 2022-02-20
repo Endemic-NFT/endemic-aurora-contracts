@@ -1,6 +1,5 @@
 const { expect } = require('chai');
 const { ethers } = require('hardhat');
-const BN = require('bignumber.js');
 const {
   deployRoyaltiesProvider,
   deployEndemicNFT,
@@ -14,7 +13,7 @@ describe('RoyaltiesProvider', function () {
     [owner, nftContractOwner, user2, feeRecipient] = await ethers.getSigners();
 
     royaltiesProviderContract = await deployRoyaltiesProvider(nftContractOwner);
-    nftContract = await deployEndemicNFT(nftContractOwner);
+    nftContract = await deployEndemicNFT();
     await nftContract.transferOwnership(nftContractOwner.address);
   }
 

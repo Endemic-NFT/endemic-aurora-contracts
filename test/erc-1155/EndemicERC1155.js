@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const { ethers, upgrades } = require('hardhat');
+const { ethers } = require('hardhat');
 const {
   deployEndemicMasterNFT,
   deployEndemicERC1155,
@@ -12,7 +12,7 @@ describe('EndemicERC1155', function () {
   beforeEach(async function () {
     [owner, user, user2, user3] = await ethers.getSigners();
 
-    nftContract = await deployEndemicERC1155(owner);
+    nftContract = await deployEndemicERC1155();
   });
 
   const createNewToken = async (artist, supply) => {

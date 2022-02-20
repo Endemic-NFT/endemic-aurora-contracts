@@ -1,13 +1,10 @@
 const { expect } = require('chai');
-const { ethers, network, upgrades } = require('hardhat');
+const { ethers, network } = require('hardhat');
 const BN = require('bignumber.js');
 const {
   deployEndemicNFT,
   deployMarketplaceWithDeps,
-  deployEndemicMasterNFT,
   deployEndemicERC1155,
-  deployContractRegistry,
-  deployFeeProvider,
 } = require('./helpers/deploy');
 const { ERC1155_ASSET_CLASS, ERC721_ASSET_CLASS } = require('./helpers/ids');
 
@@ -62,7 +59,6 @@ describe('Marketplace', function () {
     ] = await ethers.getSigners();
 
     const result = await deployMarketplaceWithDeps(
-      owner,
       makerFee,
       takerFee,
       initialFee
@@ -74,11 +70,11 @@ describe('Marketplace', function () {
     royaltiesProviderContract = result.royaltiesProviderContract;
     marketplace = result.marketplace;
 
-    nftContract = await deployEndemicNFT(owner);
+    nftContract = await deployEndemicNFT();
 
     await contractRegistryContract.addSaleContract(marketplace.address);
 
-    erc1155Contract = await deployEndemicERC1155(owner);
+    erc1155Contract = await deployEndemicERC1155();
 
     await mint(1, user1.address);
     await mintERC1155(user1.address, 3);

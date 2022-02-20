@@ -6,18 +6,23 @@ require('hardhat-gas-reporter');
 require('solidity-coverage');
 require('dotenv').config();
 
-/**
- * @type import('hardhat/config').HardhatUserConfig
- */
 module.exports = {
   solidity: {
-    version: '0.8.4',
-    settings: {
-      optimizer: {
-        enabled: true,
-        runs: 1000,
+    compilers: [
+      {
+        version: '0.8.4',
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+        },
       },
-    },
+      {
+        version: '0.8.2',
+        settings: {},
+      },
+    ],
   },
   defaultNetwork: 'hardhat',
   networks: {
@@ -46,6 +51,9 @@ module.exports = {
     coinmarketcap: process.env.COINMARKETCAP_API_KEY,
   },
   etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY,
+    apiKey: {
+      // aurora: process.env.ETHERSCAN_API_KEY,
+      rinkeby: process.env.ETHERSCAN_API_KEY,
+    },
   },
 };

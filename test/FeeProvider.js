@@ -1,9 +1,6 @@
 const { expect } = require('chai');
-const { ethers, network, upgrades } = require('hardhat');
-const BN = require('bignumber.js');
+const { ethers } = require('hardhat');
 const {
-  deployEndemicNFT,
-  deployBid,
   deployEndemicMasterNFT,
   deployContractRegistry,
   deployFeeProvider,
@@ -20,11 +17,10 @@ describe('FeeProvider', function () {
   async function deploy(makerFee = 300, takerFee = 300, initialFee = 2200) {
     [owner, user1, nftContract, saleContract] = await ethers.getSigners();
 
-    contractRegistryContract = await deployContractRegistry(owner);
-    masterNftContract = await deployEndemicMasterNFT(owner);
+    contractRegistryContract = await deployContractRegistry();
+    masterNftContract = await deployEndemicMasterNFT();
 
     feeProviderContract = await deployFeeProvider(
-      owner,
       masterNftContract.address,
       contractRegistryContract.address,
       makerFee,

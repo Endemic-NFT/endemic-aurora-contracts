@@ -22,9 +22,9 @@ deployFeeProvider:
 deployRoyaltiesProvider:
 	npx hardhat run scripts/royalties-provider/deploy-royalties-provider.js --network ${network}
 
-.PHONY: deployErc721
-deployErc721:
-	npx hardhat run scripts/erc-721/deploy-erc721.js --network ${network}
+.PHONY: deployEndemicErc721
+deployEndemicErc721:
+	npx hardhat run scripts/erc-721/deploy-endemic-erc721.js --network ${network}
 
 .PHONY: deployMarketplace
 deployMarketplace:
@@ -34,9 +34,9 @@ deployMarketplace:
 deployBeacon:
 	npx hardhat run scripts/erc-721/deploy-beacon.js --network ${network}
 
-.PHONY: deployFactory
-deployFactory:
-	npx hardhat run scripts/erc-721/deploy-nft-factory.js --network ${network}
+.PHONY: deployEndemicErc721Factory
+deployEndemicErc721Factory:
+	npx hardhat run scripts/erc-721/deploy-endemic-erc721-factory.js --network ${network}
 
 .PHONY: deployBid
 deployBid:
@@ -45,18 +45,6 @@ deployBid:
 .PHONY: deployCollectionBid
 deployCollectionBid:
 	npx hardhat run scripts/bid/deploy-collection-bid.js --network ${network}
-
-.PHONY: upgradeErc721
-upgradeErc721:
-	npx hardhat run scripts/erc-721/upgrade-erc721-proxy.js --network ${network}
-
-.PHONY: upgradeMarketplace
-upgradeMarketplace:
-	npx hardhat run scripts/marketplace/upgrade-marketplace-proxy.js --network ${network}
-
-.PHONY: upgradeFeeProvider
-upgradeFeeProvider:
-	npx hardhat run scripts/fee-provider/upgrade-fee-provider-proxy.js --network ${network}
 
 .PHONY: deployEndemicErc20
 deployEndemicErc20:
@@ -73,3 +61,19 @@ deployERC1155Beacon:
 .PHONY: deployERC1155Factory
 deployERC1155Factory:
 	npx hardhat run scripts/erc-1155/deploy-erc1155-factory.js --network ${network}
+
+.PHONY: upgradeErc721
+upgradeErc721:
+	npx hardhat run scripts/erc-721/upgrade-erc721-proxy.js --network ${network}
+
+.PHONY: upgradeMarketplace
+upgradeMarketplace:
+	npx hardhat run scripts/marketplace/upgrade-marketplace-proxy.js --network ${network}
+
+.PHONY: upgradeFeeProvider
+upgradeFeeProvider:
+	npx hardhat run scripts/fee-provider/upgrade-fee-provider-proxy.js --network ${network}
+
+.PHONY: verify
+verify:
+	npx hardhat verify --network ${network} ${address}

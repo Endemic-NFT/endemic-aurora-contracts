@@ -1,6 +1,5 @@
 const { expect } = require('chai');
-const { ethers, network, upgrades } = require('hardhat');
-const BN = require('bignumber.js');
+const { ethers } = require('hardhat');
 const { deployContractRegistry } = require('./helpers/deploy');
 
 describe('ContractRegistry', function () {
