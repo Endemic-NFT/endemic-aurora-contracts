@@ -83,7 +83,7 @@ describe('Marketplace', function () {
   describe('Initial State', function () {
     beforeEach(deploy);
 
-    it('should start with owner and NFT address set', async function () {
+    it('should have owner', async function () {
       const ownerAddr = await marketplace.owner();
       expect(ownerAddr).to.equal(owner.address);
     });
