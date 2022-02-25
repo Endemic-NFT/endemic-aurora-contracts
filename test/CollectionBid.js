@@ -160,6 +160,41 @@ describe('CollectionBid', function () {
         })
       ).to.be.revertedWith('Pausable: paused');
     });
+
+    it('should successfully create multiple bids on same collection', async () => {
+      await bidContract.placeBid(nftContract.address, 1000, {
+        value: ethers.utils.parseUnits('0.515'),
+      });
+
+      await bidContract.connect(user2).placeBid(nftContract.address, 1000, {
+        value: ethers.utils.parseUnits('0.616'),
+      });
+
+      await bidContract.connect(user3).placeBid(nftContract.address, 1000, {
+        value: ethers.utils.parseUnits('0.717'),
+      });
+
+      const activeBid1 = await bidContract.getBidByBidder(
+        nftContract.address,
+        owner.address
+      );
+      expect(activeBid1.bidIndex).to.equal(0);
+      expect(activeBid1.bidder).to.equal(owner.address);
+
+      const activeBid2 = await bidContract.getBidByBidder(
+        nftContract.address,
+        user2.address
+      );
+      expect(activeBid2.bidIndex).to.equal(1);
+      expect(activeBid2.bidder).to.equal(user2.address);
+
+      const activeBid3 = await bidContract.getBidByBidder(
+        nftContract.address,
+        user3.address
+      );
+      expect(activeBid3.bidIndex).to.equal(2);
+      expect(activeBid3.bidder).to.equal(user3.address);
+    });
   });
 
   describe('Cancel bid', () => {
@@ -271,6 +306,53 @@ describe('CollectionBid', function () {
 
       expect(bid.bidder).to.equal(user2.address);
       expect(bid.priceWithFee).to.equal(ethers.utils.parseUnits('0.4'));
+    });
+
+    it('should be able to cancel bid where there are multiple bids on same collection', async () => {
+      await bidContract.placeBid(nftContract.address, 1000, {
+        value: ethers.utils.parseUnits('0.515'),
+      });
+
+      await bidContract.connect(user2).placeBid(nftContract.address, 1000, {
+        value: ethers.utils.parseUnits('0.616'),
+      });
+
+      await bidContract.connect(user3).placeBid(nftContract.address, 1000, {
+        value: ethers.utils.parseUnits('0.717'),
+      });
+
+      const activeBid1 = await bidContract.getBidByBidder(
+        nftContract.address,
+        owner.address
+      );
+      expect(activeBid1.bidIndex).to.equal(0);
+      expect(activeBid1.bidder).to.equal(owner.address);
+
+      const activeBid2 = await bidContract.getBidByBidder(
+        nftContract.address,
+        user2.address
+      );
+      expect(activeBid2.bidIndex).to.equal(1);
+      expect(activeBid2.bidder).to.equal(user2.address);
+
+      const activeBid3 = await bidContract.getBidByBidder(
+        nftContract.address,
+        user3.address
+      );
+      expect(activeBid3.bidIndex).to.equal(2);
+      expect(activeBid3.bidder).to.equal(user3.address);
+
+      const cancelTx1 = await bidContract.cancelBid(nftContract.address);
+      await expect(cancelTx1)
+        .to.emit(bidContract, 'BidCancelled')
+        .withArgs(activeBid1.bidId, nftContract.address, owner.address);
+
+      const cancelTx2 = await bidContract
+        .connect(user2)
+        .cancelBid(nftContract.address);
+      await expect(cancelTx2)
+        .to.emit(bidContract, 'BidCancelled')
+        .withArgs(activeBid2.bidId, nftContract.address, user2.address);
     });
   });
 

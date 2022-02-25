@@ -134,6 +134,9 @@ abstract contract BidCore is PausableUpgradeable, OwnableUpgradeable {
         bidIndex = bidCounterByToken[nftContract][tokenId];
         bidCounterByToken[nftContract][tokenId]++;
 
+        bidIdByTokenAndBidder[nftContract][tokenId][_msgSender()] = bidId;
+        bidIndexByBidId[bidId] = bidIndex;
+
         bidsByToken[nftContract][tokenId][bidIndex] = Bid({
             id: bidId,
             bidder: _msgSender(),
@@ -410,14 +413,11 @@ abstract contract BidCore is PausableUpgradeable, OwnableUpgradeable {
         address bidder,
         uint256 priceWithFee
     ) internal {
-        // Delete bid references
         delete bidIndexByBidId[bidId];
         delete bidIdByTokenAndBidder[nftContract][tokenId][bidder];
 
-        // Check if the bid is at the end of the mapping
         uint256 lastBidIndex = bidCounterByToken[nftContract][tokenId].sub(1);
         if (lastBidIndex != bidIndex) {
-            // Move last bid to the removed place
             Bid storage lastBid = bidsByToken[nftContract][tokenId][
                 lastBidIndex
             ];

@@ -121,6 +121,9 @@ abstract contract CollectionBidCore is PausableUpgradeable, OwnableUpgradeable {
         bidIndex = bidCounterByCollection[nftContract];
         bidCounterByCollection[nftContract]++;
 
+        bidIdByCollectionAndBidder[nftContract][_msgSender()] = bidId;
+        bidIndexByBidId[bidId] = bidIndex;
+
         bidsByCollection[nftContract][bidIndex] = Bid({
             id: bidId,
             bidder: _msgSender(),
