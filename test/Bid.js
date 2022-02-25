@@ -589,6 +589,42 @@ describe('Bid', function () {
         ethers.utils.parseUnits('0')
       );
     });
+
+    it('should be able to accept bid after purchase', async () => {
+      await bidContract.placeBid(nftContract.address, 1, 1000, {
+        value: ethers.utils.parseUnits('0.515'),
+      });
+
+      await bidContract.connect(user2).placeBid(nftContract.address, 1, 1000, {
+        value: ethers.utils.parseUnits('0.616'),
+      });
+
+      const bidId1 = (
+        await bidContract.getBidByToken(nftContract.address, 1, 0)
+      )[0];
+
+      const bidId2 = (
+        await bidContract.getBidByToken(nftContract.address, 1, 1)
+      )[0];
+
+      await safeTransferWithBytes(
+        nftContract,
+        user1,
+        user1.address,
+        bidContract.address,
+        1,
+        bidId1
+      );
+
+      await safeTransferWithBytes(
+        nftContract,
+        owner,
+        owner.address,
+        bidContract.address,
+        1,
+        bidId2
+      );
+    });
   });
 
   describe('Distribute master', () => {

@@ -7,10 +7,10 @@ const rinkeby = {
   marketplaceProxy: '0x8Bbd06bc00F21B5d4232dB28191272dD6aA1eee6',
   endemicNftBeacon: '0x347D075C2F12CE0A90CdafFB593cE91970DFa431',
   endemicNftFactory: '0x6891e2695c88aB0B9F27ee45C9Dc43Ff35864067',
-  bidProxy: '0xc542051aB9831fF214D461015503686dBF3be96b',
-  contractImporter: '0x26a033078618206595D9461132736B0F17d96DEf',
+  bidProxy: '0xfffceB0F5be52405D8584130Ce2d8ce8c4D724e3',
+  contractImporter: '0x4F24FaFe8fD1Cb95d36A8C2cEf74526394281d47',
   artMinter: '0x559C5a1058f1aD85842459BbeFDe10f909cc4472',
-  collectionBidProxy: '0x763461E4aB5Bd214216C2b2F49aaA405125BA700',
+  collectionBidProxy: '0x4F24FaFe8fD1Cb95d36A8C2cEf74526394281d47',
   endemicErc20: '',
 
   endemicERC1155Proxy: '',
