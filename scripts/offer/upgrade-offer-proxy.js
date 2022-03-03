@@ -9,6 +9,7 @@ async function main() {
   await upgrades.upgradeProxy(bidProxy, Bid, { deployer });
 }
 
+
 main()
   .then(() => process.exit(0))
   .catch((error) => {

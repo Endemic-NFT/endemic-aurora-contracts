@@ -3,14 +3,14 @@ const { ethers } = require('hardhat');
 const {
   deployEndemicNFT,
   deployMarketplaceWithDeps,
-  deployBid,
+  deployOffer,
 } = require('./helpers/deploy');
 const { ERC721_ASSET_CLASS } = require('./helpers/ids');
 const safeTransferWithBytes = require('./helpers/safeTransferWithBytes');
 
 describe('NftTrade', function () {
   let marketplace,
-    bid,
+    offer,
     masterNftContract,
     nftContract,
     feeProviderContract,
@@ -44,23 +44,22 @@ describe('NftTrade', function () {
     marketplace = result.marketplace;
     royaltiesProviderContract = result.royaltiesProviderContract;
 
-    bid = await deployBid(
+    offer = await deployOffer(
       feeProviderContract.address,
-      royaltiesProviderContract.address,
-      masterNftContract.address
+      royaltiesProviderContract.address
     );
 
     nftContract = await deployEndemicNFT();
 
     await contractRegistryContract.addSaleContract(marketplace.address);
-    await contractRegistryContract.addSaleContract(bid.address);
+    await contractRegistryContract.addSaleContract(offer.address);
 
     await mint(1, owner.address);
   }
 
   beforeEach(deploy);
 
-  it('should be able to accept bid after buying NFT', async () => {
+  it('should be able to accept offer after buying NFT', async () => {
     // owner set auctions for 1 ETH
     await nftContract.approve(marketplace.address, 1);
     await marketplace.createAuction(
@@ -79,16 +78,12 @@ describe('NftTrade', function () {
       owner.address
     );
 
-    //user1 bids 0.9 ETH
-    await bid.connect(user1).placeBid(nftContract.address, 1, 1000, {
+    //user1 offers 0.9 ETH
+    await offer.connect(user1).placeOffer(nftContract.address, 1, 100000, {
       value: ethers.utils.parseUnits('0.9'),
     });
 
-    const user1Bid = await bid.getBidByBidder(
-      nftContract.address,
-      1,
-      user1.address
-    );
+    const user1Offer = await offer.getOffer(1);
 
     //user2 buys NFT
     await marketplace.connect(user2).bid(auctionId, 1, {
@@ -97,15 +92,12 @@ describe('NftTrade', function () {
 
     expect(await nftContract.ownerOf(1)).to.equal(user2.address);
 
-    //user2 accepts bid from user1
-    await safeTransferWithBytes(
-      nftContract,
-      user2,
-      user2.address,
-      bid.address,
-      1,
-      user1Bid.bidId
-    );
+    //user2 accepts offer from user1
+
+    await nftContract.connect(user2).approve(offer.address, 1);
+
+    await offer.connect(user2).acceptOffer(1);
+
     expect(await nftContract.ownerOf(1)).to.equal(user1.address);
   });
 });

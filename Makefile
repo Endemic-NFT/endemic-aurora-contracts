@@ -38,13 +38,13 @@ deployBeacon:
 deployEndemicErc721Factory:
 	npx hardhat run scripts/erc-721/deploy-endemic-erc721-factory.js --network ${network}
 
-.PHONY: deployBid
-deployBid:
-	npx hardhat run scripts/bid/deploy-bid.js --network ${network}
+.PHONY: deployOffer
+deployOffer:
+	npx hardhat run scripts/offer/deploy-offer.js --network ${network}
 
-.PHONY: deployCollectionBid
-deployCollectionBid:
-	npx hardhat run scripts/bid/deploy-collection-bid.js --network ${network}
+.PHONY: deployCollectionOffer
+deployCollectionOffer:
+	npx hardhat run scripts/offer/deploy-collection-offer.js --network ${network}
 
 .PHONY: deployEndemicErc20
 deployEndemicErc20:

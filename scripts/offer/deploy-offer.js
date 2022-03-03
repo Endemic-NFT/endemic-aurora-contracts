@@ -3,28 +3,28 @@ const { getForNetwork } = require('../utils/addresses');
 
 async function main() {
   const [deployer] = await ethers.getSigners();
-  const { endemicMasterKeyProxy, feeProviderProxy, royaltiesProviderProxy } =
-    getForNetwork(network.name);
+  const { feeProviderProxy, royaltiesProviderProxy } = getForNetwork(
+    network.name
+  );
 
-  console.log('Deploying Bid with the account:', deployer.address);
+  console.log('Deploying Offer with the account:', deployer.address);
 
-  const Bid = await ethers.getContractFactory('Bid');
-  const bidProxy = await upgrades.deployProxy(
-    Bid,
+  const Offer = await ethers.getContractFactory('Offer');
+  const offerProxy = await upgrades.deployProxy(
+    Offer,
     [
       feeProviderProxy,
-      endemicMasterKeyProxy,
       royaltiesProviderProxy,
       '0x813201fe76De0622223492D2467fF5Fd38cF2320',
     ],
     {
       deployer,
-      initializer: '__Bid_init',
+      initializer: '__Offer_init',
     }
   );
-  await bidProxy.deployed();
+  await offerProxy.deployed();
 
-  console.log('Bid deployed to:', bidProxy.address);
+  console.log('Offer deployed to:', offerProxy.address);
 }
 
 main()

@@ -109,26 +109,21 @@ const deployEndemicMasterNFT = async () => {
   return masterNftContract;
 };
 
-const deployBid = async (
-  feeProviderAddress,
-  royaltiesProviderAddress,
-  masterNFTAddress
-) => {
-  const Bid = await ethers.getContractFactory('Bid');
-  const bidContract = await upgrades.deployProxy(
-    Bid,
+const deployOffer = async (feeProviderAddress, royaltiesProviderAddress) => {
+  const Offer = await ethers.getContractFactory('Offer');
+  const offer = await upgrades.deployProxy(
+    Offer,
     [
       feeProviderAddress,
-      masterNFTAddress,
       royaltiesProviderAddress,
       '0x1D96e9bA0a7c1fdCEB33F3f4C71ca9117FfbE5CD',
     ],
     {
-      initializer: '__Bid_init',
+      initializer: '__Offer_init',
     }
   );
-  await bidContract.deployed();
-  return bidContract;
+  await offer.deployed();
+  return offer;
 };
 
 const deployCollectionBid = async (
@@ -214,7 +209,7 @@ module.exports = {
   deployEndemicNFT,
   deployMarketplaceWithDeps,
   deployEndemicMasterNFT,
-  deployBid,
+  deployOffer,
   deployCollectionBid,
   deployEndemicRewards,
   deployEndemicERC1155,
