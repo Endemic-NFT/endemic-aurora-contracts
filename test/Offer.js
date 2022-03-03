@@ -100,7 +100,7 @@ describe('Offer', function () {
           activeOffer.expiresAt
         );
       expect(activeOffer.id).to.equal('1');
-      expect(activeOffer.offerder).to.equal(owner.address);
+      expect(activeOffer.bidder).to.equal(owner.address);
       expect(activeOffer.price).to.equal(ethers.utils.parseUnits('0.5'));
       expect(activeOffer.priceWithFee).to.equal(
         ethers.utils.parseUnits('0.515')
@@ -118,7 +118,7 @@ describe('Offer', function () {
       ).to.be.revertedWith('OfferExists');
 
       const activeOffer = await offerContract.getOffer(1);
-      expect(activeOffer.offerder).to.equal(owner.address);
+      expect(activeOffer.bidder).to.equal(owner.address);
       expect(activeOffer.price).to.equal(ethers.utils.parseUnits('0.5'));
       expect(activeOffer.priceWithFee).to.equal(
         ethers.utils.parseUnits('0.515')
@@ -133,7 +133,7 @@ describe('Offer', function () {
       ).to.be.revertedWith('InvalidValueSent');
     });
 
-    it('should fail to offer on token owned by offerder', async () => {
+    it('should fail to offer on token owned by bidder', async () => {
       await expect(
         offerContract
           .connect(user1)
@@ -176,11 +176,11 @@ describe('Offer', function () {
         });
       const activeOffer1 = await offerContract.getOffer(1);
 
-      expect(activeOffer1.offerder).to.equal(owner.address);
+      expect(activeOffer1.bidder).to.equal(owner.address);
       const activeOffer2 = await offerContract.getOffer(2);
-      expect(activeOffer2.offerder).to.equal(user2.address);
+      expect(activeOffer2.bidder).to.equal(user2.address);
       const activeOffer3 = await offerContract.getOffer(3);
-      expect(activeOffer3.offerder).to.equal(user3.address);
+      expect(activeOffer3.bidder).to.equal(user3.address);
     });
   });
 
@@ -227,7 +227,7 @@ describe('Offer', function () {
         'NoActiveOffer'
       );
       const activeOffer = await offerContract.getOffer(2);
-      expect(activeOffer.offerder).to.equal(user2.address);
+      expect(activeOffer.bidder).to.equal(user2.address);
     });
 
     it('should fail to cancel offer when paused', async () => {
@@ -268,7 +268,7 @@ describe('Offer', function () {
         'NoActiveOffer'
       );
       const offer = await offerContract.getOffer(3);
-      expect(offer.offerder).to.equal(user2.address);
+      expect(offer.bidder).to.equal(user2.address);
       expect(offer.priceWithFee).to.equal(ethers.utils.parseUnits('0.4'));
     });
 
@@ -287,11 +287,11 @@ describe('Offer', function () {
           value: ethers.utils.parseUnits('0.717'),
         });
       const activeOffer1 = await offerContract.getOffer(1);
-      expect(activeOffer1.offerder).to.equal(owner.address);
+      expect(activeOffer1.bidder).to.equal(owner.address);
       const activeOffer2 = await offerContract.getOffer(2);
-      expect(activeOffer2.offerder).to.equal(user2.address);
+      expect(activeOffer2.bidder).to.equal(user2.address);
       const activeOffer3 = await offerContract.getOffer(3);
-      expect(activeOffer3.offerder).to.equal(user3.address);
+      expect(activeOffer3.bidder).to.equal(user3.address);
       const cancelTx1 = await offerContract.cancelOffer(activeOffer1.id);
       await expect(cancelTx1)
         .to.emit(offerContract, 'OfferCancelled')
@@ -336,7 +336,8 @@ describe('Offer', function () {
           1,
           owner.address,
           user1.address,
-          ethers.utils.parseUnits('0.5')
+          ethers.utils.parseUnits('0.5'),
+          ethers.utils.parseUnits('0.125')
         );
       const user1Balance2 = await user1.getBalance();
       expect(user1Balance2.sub(user1Balance1)).to.be.closeTo(
@@ -408,7 +409,8 @@ describe('Offer', function () {
           1,
           owner.address,
           user1.address,
-          ethers.utils.parseUnits('0.5')
+          ethers.utils.parseUnits('0.5'),
+          ethers.utils.parseUnits('0.125')
         );
       const user1Balance2 = await user1.getBalance();
       expect(user1Balance2.sub(user1Balance1)).to.be.closeTo(

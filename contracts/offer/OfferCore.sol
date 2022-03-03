@@ -65,7 +65,8 @@ abstract contract OfferCore is
         uint256 indexed tokenId,
         address bidder,
         address indexed seller,
-        uint256 price
+        uint256 price,
+        uint256 totalFees
     );
 
     event OfferCancelled(
@@ -212,7 +213,8 @@ abstract contract OfferCore is
             tokenId,
             bidder,
             _msgSender(),
-            price
+            price,
+            totalCut
         );
     }
 
