@@ -13,7 +13,9 @@ import "../royalties/IRoyaltiesProvider.sol";
 
 error InvalidValueSent();
 error InvalidTokenOwner();
+error Accept();
 error DurationTooShort();
+error AcceptFromSelf();
 error OfferExists();
 error NoActiveOffer();
 
@@ -33,7 +35,7 @@ abstract contract OfferCore is
 
     // Offer by token address => token id => offerder => offerId
     mapping(address => mapping(uint256 => mapping(address => uint256)))
-        internal offerIdsByOfferder;
+        internal offerIdsByBidder;
 
     address feeClaimAddress;
 
@@ -121,7 +123,7 @@ abstract contract OfferCore is
         uint256 price = (msg.value * (10000)) / (takerFee + 10000);
         uint256 expiresAt = block.timestamp + duration;
 
-        offerIdsByOfferder[nftContract][tokenId][_msgSender()] = offerId;
+        offerIdsByBidder[nftContract][tokenId][_msgSender()] = offerId;
         offersById[offerId] = Offer({
             id: offerId,
             bidder: _msgSender(),
@@ -163,33 +165,33 @@ abstract contract OfferCore is
             "Invalid offer"
         );
 
-        address bidder = offer.bidder;
-        uint256 tokenId = offer.tokenId;
-        address contractId = offer.nftContract;
-        uint256 price = offer.price;
-        uint256 priceWithFee = offer.priceWithFee;
+        if (offer.bidder == _msgSender()) revert AcceptFromSelf();
 
-        delete offersById[offerId];
-        delete offerIdsByOfferder[contractId][tokenId][bidder];
+        delete offersById[offer.id];
+        delete offerIdsByBidder[offer.nftContract][offer.tokenId][offer.bidder];
 
         uint256 totalCut = _calculateCut(
-            contractId,
-            tokenId,
+            offer.nftContract,
+            offer.tokenId,
             _msgSender(),
-            price,
-            priceWithFee
+            offer.price,
+            offer.priceWithFee
         );
 
         (
             address royaltiesRecipient,
             uint256 royaltiesCut
-        ) = _calculateRoyalties(contractId, tokenId, price);
+        ) = _calculateRoyalties(offer.nftContract, offer.tokenId, offer.price);
 
         // sale happened
-        feeProvider.onInitialSale(contractId, tokenId);
+        feeProvider.onInitialSale(offer.nftContract, offer.tokenId);
 
         // Transfer token to bidder
-        IERC721(contractId).safeTransferFrom(_msgSender(), bidder, tokenId);
+        IERC721(offer.nftContract).safeTransferFrom(
+            _msgSender(),
+            offer.bidder,
+            offer.tokenId
+        );
 
         // transfer fees
         if (totalCut > 0) {
@@ -204,16 +206,16 @@ abstract contract OfferCore is
         // Transfer ETH from bidder to seller
         _transferFundsToSeller(
             _msgSender(),
-            priceWithFee - totalCut - royaltiesCut
+            offer.priceWithFee - totalCut - royaltiesCut
         );
 
         emit OfferAccepted(
             offerId,
-            contractId,
-            tokenId,
-            bidder,
+            offer.nftContract,
+            offer.tokenId,
+            offer.bidder,
             _msgSender(),
-            price,
+            offer.price,
             totalCut
         );
     }
@@ -307,7 +309,7 @@ abstract contract OfferCore is
         uint256 tokenId,
         address offerder
     ) internal {
-        uint256 offerId = offerIdsByOfferder[nftContract][tokenId][offerder];
+        uint256 offerId = offerIdsByBidder[nftContract][tokenId][offerder];
         Offer memory offer = offersById[offerId];
 
         require(
@@ -320,9 +322,7 @@ abstract contract OfferCore is
 
     function _cancelOffer(Offer memory offer) internal {
         delete offersById[offer.id];
-        delete offerIdsByOfferder[offer.nftContract][offer.tokenId][
-            offer.bidder
-        ];
+        delete offerIdsByBidder[offer.nftContract][offer.tokenId][offer.bidder];
 
         (bool success, ) = payable(offer.bidder).call{
             value: offer.priceWithFee
@@ -342,7 +342,7 @@ abstract contract OfferCore is
         uint256 tokenId,
         address bidder
     ) internal view returns (bool) {
-        uint256 offerId = offerIdsByOfferder[nftContract][tokenId][bidder];
+        uint256 offerId = offerIdsByBidder[nftContract][tokenId][bidder];
         Offer memory offer = offersById[offerId];
         return offer.bidder == bidder;
     }

@@ -74,6 +74,10 @@ upgradeMarketplace:
 upgradeFeeProvider:
 	npx hardhat run scripts/fee-provider/upgrade-fee-provider-proxy.js --network ${network}
 
+.PHONY: upgradeOffer
+upgradeOffer:
+	npx hardhat run scripts/offer/upgrade-offer-proxy.js --network ${network}
+
 .PHONY: verify
 verify:
 	npx hardhat verify --network ${network} ${address}
