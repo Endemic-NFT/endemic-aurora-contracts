@@ -9,14 +9,14 @@
     "lint": "eslint \"scripts/**/*.js\" --fix"
   },
   "dependencies": {
-    "@nomiclabs/hardhat-etherscan": "^3.0.1",
+    "@nomiclabs/hardhat-etherscan": "^3.0.3",
     "@openzeppelin/contracts": "4.5.0",
     "@openzeppelin/contracts-upgradeable": "^4.5.1",
     "@openzeppelin/hardhat-upgrades": "^1.12.1",
     "dotenv": "10.0.0",
     "ethers": "^5.5.4",
     "hardhat": "^2.8.4",
-    "web3": "1.7.0"
+    "web3": "1.7.1"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.5",
