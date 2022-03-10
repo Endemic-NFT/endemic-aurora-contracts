@@ -204,6 +204,14 @@ const deployContractRegistry = async () => {
   return contractRegistryContracat;
 };
 
+const deployTipjar = async () => {
+  const Tipjar = await ethers.getContractFactory('Tipjar');
+  const tipjarContract = await Tipjar.deploy();
+  
+  await tipjarContract.deployed();
+  return tipjarContract;
+};
+
 module.exports = {
   deployEndemicToken,
   deployEndemicNFT,
@@ -216,4 +224,5 @@ module.exports = {
   deployFeeProvider,
   deployContractRegistry,
   deployRoyaltiesProvider,
+  deployTipjar
 };
