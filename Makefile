@@ -78,6 +78,10 @@ upgradeFeeProvider:
 upgradeOffer:
 	npx hardhat run scripts/offer/upgrade-offer-proxy.js --network ${network}
 
+.PHONY: deployTipjar
+deployTipjar:
+	npx hardhat run scripts/tipjar/deploy-tipjar.js --network ${network}
+
 .PHONY: verify
 verify:
 	npx hardhat verify --network ${network} ${address}
