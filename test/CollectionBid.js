@@ -19,7 +19,7 @@ describe('CollectionBid', function () {
     royaltiesProviderContract,
     contractRegistryContract;
 
-  let owner, user1, user2, user3, royaltiesRecipient;
+  let owner, user1, user2, user3, royaltiesRecipient, otherSigners;
 
   async function mint(id, recipient) {
     await nftContract
@@ -31,16 +31,8 @@ describe('CollectionBid', function () {
   }
 
   async function deploy(makerFee = 300, takerFee = 300, initialFee = 2200) {
-    [
-      owner,
-      user1,
-      user2,
-      user3,
-      minter,
-      signer,
-      royaltiesRecipient,
-      ...otherSigners
-    ] = await ethers.getSigners();
+    [owner, user1, user2, user3, royaltiesRecipient, ...otherSigners] =
+      await ethers.getSigners();
 
     contractRegistryContract = await deployContractRegistry();
     masterNftContract = await deployEndemicMasterNFT();
@@ -586,7 +578,7 @@ describe('CollectionBid', function () {
         await bidContract.getBidByCollection(nftContract.address, 0)
       )[0];
 
-      const transferTx = await safeTransferWithBytes(
+      await safeTransferWithBytes(
         nftContract,
         user1,
         user1.address,

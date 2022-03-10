@@ -28,16 +28,8 @@ describe('Offer', function () {
   }
 
   async function deploy(makerFee = 300, takerFee = 300, initialFee = 2200) {
-    [
-      owner,
-      user1,
-      user2,
-      user3,
-      minter,
-      signer,
-      royaltiesRecipient,
-      ...otherSigners
-    ] = await ethers.getSigners();
+    [owner, user1, user2, user3, royaltiesRecipient] =
+      await ethers.getSigners();
 
     masterNftContract = await deployEndemicMasterNFT();
     contractRegistryContract = await deployContractRegistry();

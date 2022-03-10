@@ -6,14 +6,9 @@ async function safeTransferWithBytes(
   tokenId,
   data
 ) {
-  return await contract
-    .connect(sender)
-    ['safeTransferFrom(address,address,uint256,bytes)'](
-      from,
-      to,
-      tokenId,
-      data
-    );
+  return (await contract.connect(sender))[
+    'safeTransferFrom(address,address,uint256,bytes)'
+  ](from, to, tokenId, data);
 }
 
 module.exports = safeTransferWithBytes;

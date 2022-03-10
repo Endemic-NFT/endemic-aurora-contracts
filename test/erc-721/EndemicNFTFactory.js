@@ -1,18 +1,14 @@
 const { expect } = require('chai');
 const { ethers } = require('hardhat');
-const {
-  deployEndemicNFT,
-  deployEndemicMasterNFT,
-} = require('../helpers/deploy');
+const { deployEndemicNFT } = require('../helpers/deploy');
 
 describe('EndemicNFTFactory', function () {
   let factoryContract = null;
-  let owner, user, signer;
+  let owner, user;
 
   beforeEach(async function () {
-    [owner, user, signer] = await ethers.getSigners();
+    [owner, user] = await ethers.getSigners();
 
-    const masterNftContract = await deployEndemicMasterNFT();
     const implContract = await deployEndemicNFT();
     // beacon
     const EndemicNFTBeacon = await ethers.getContractFactory(

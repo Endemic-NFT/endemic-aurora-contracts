@@ -6,18 +6,16 @@ const {
   deployOffer,
 } = require('./helpers/deploy');
 const { ERC721_ASSET_CLASS } = require('./helpers/ids');
-const safeTransferWithBytes = require('./helpers/safeTransferWithBytes');
 
 describe('NftTrade', function () {
   let marketplace,
     offer,
-    masterNftContract,
     nftContract,
     feeProviderContract,
     contractRegistryContract,
     royaltiesProviderContract;
 
-  let owner, user1, user2, user3, minter, signer;
+  let owner, user1, user2;
 
   async function mint(id, recipient) {
     await nftContract
@@ -29,8 +27,7 @@ describe('NftTrade', function () {
   }
 
   async function deploy(makerFee = 0, takerFee, initialFee = 0) {
-    [owner, user1, user2, user3, minter, signer, ...otherSigners] =
-      await ethers.getSigners();
+    [owner, user1, user2] = await ethers.getSigners();
 
     const result = await deployMarketplaceWithDeps(
       makerFee,
@@ -39,7 +36,6 @@ describe('NftTrade', function () {
     );
 
     contractRegistryContract = result.contractRegistryContract;
-    masterNftContract = result.masterNftContract;
     feeProviderContract = result.feeProviderContract;
     marketplace = result.marketplace;
     royaltiesProviderContract = result.royaltiesProviderContract;
@@ -83,7 +79,7 @@ describe('NftTrade', function () {
       value: ethers.utils.parseUnits('0.9'),
     });
 
-    const user1Offer = await offer.getOffer(1);
+    await offer.getOffer(1);
 
     //user2 buys NFT
     await marketplace.connect(user2).bid(auctionId, 1, {
