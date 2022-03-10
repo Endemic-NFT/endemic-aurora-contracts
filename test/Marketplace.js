@@ -17,7 +17,7 @@ describe('Marketplace', function () {
     royaltiesProviderContract,
     contractRegistryContract;
 
-  let owner, user1, user2, user3, minter, signer, feeRecipient;
+  let owner, user1, user2, user3, feeRecipient;
 
   async function mint(id, recipient) {
     await nftContract
@@ -42,21 +42,8 @@ describe('Marketplace', function () {
     });
   }
 
-  const createAuctionId = (contractId, tokenId, seller) => {
-    return `${contractId}-${tokenId}-${seller}`;
-  };
-
   async function deploy(makerFee = 0, takerFee, initialFee = 0) {
-    [
-      owner,
-      user1,
-      user2,
-      user3,
-      minter,
-      signer,
-      feeRecipient,
-      ...otherSigners
-    ] = await ethers.getSigners();
+    [owner, user1, user2, user3, feeRecipient] = await ethers.getSigners();
 
     const result = await deployMarketplaceWithDeps(
       makerFee,
@@ -647,7 +634,6 @@ describe('Marketplace', function () {
     });
 
     it('should be able to bid in middle of auction', async function () {
-      const user1Bal1 = await user1.getBalance();
       await network.provider.send('evm_increaseTime', [60]);
       await marketplace.connect(user2).bid(erc721AuctionId, 1, {
         value: ethers.utils.parseUnits('0.103'),

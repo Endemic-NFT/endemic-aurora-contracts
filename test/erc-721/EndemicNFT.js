@@ -1,16 +1,13 @@
 const { expect } = require('chai');
 const { ethers } = require('hardhat');
-const {
-  deployEndemicMasterNFT,
-  deployEndemicNFT,
-} = require('../helpers/deploy');
+const { deployEndemicNFT } = require('../helpers/deploy');
 
 describe('EndemicNFT', function () {
   let nftContract;
-  let owner, user, user2, user3;
+  let owner, user;
 
   beforeEach(async function () {
-    [owner, user, user2, user3] = await ethers.getSigners();
+    [owner, user] = await ethers.getSigners();
 
     nftContract = await deployEndemicNFT();
   });
@@ -86,8 +83,6 @@ describe('EndemicNFT', function () {
     });
 
     it('should mint an NFT after burn', async function () {
-      const tokenId = 1;
-
       await nftContract.connect(owner).setDefaultApproval(user.address, true);
 
       await nftContract

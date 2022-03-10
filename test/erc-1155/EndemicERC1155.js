@@ -1,16 +1,13 @@
 const { expect } = require('chai');
 const { ethers } = require('hardhat');
-const {
-  deployEndemicMasterNFT,
-  deployEndemicERC1155,
-} = require('../helpers/deploy');
+const { deployEndemicERC1155 } = require('../helpers/deploy');
 
 describe('EndemicERC1155', function () {
   let nftContract;
-  let owner, user, user2, user3;
+  let owner, user, user2;
 
   beforeEach(async function () {
-    [owner, user, user2, user3] = await ethers.getSigners();
+    [owner, user, user2] = await ethers.getSigners();
 
     nftContract = await deployEndemicERC1155();
   });
@@ -74,7 +71,7 @@ describe('EndemicERC1155', function () {
     });
 
     it('should mint with initial supply if owner', async function () {
-      const mintTx = await nftContract.connect(owner).mint({
+      await nftContract.connect(owner).mint({
         recipient: user.address,
         amount: 5,
         tokenId: 1,

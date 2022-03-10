@@ -3,7 +3,7 @@ const { ethers } = require('hardhat');
 const { deployContractRegistry } = require('./helpers/deploy');
 
 describe('ContractRegistry', function () {
-  let contractRegistryContract;
+  let contractRegistryContract, saleContract;
   let owner, user1;
 
   async function deploy() {

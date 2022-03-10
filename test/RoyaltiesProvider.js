@@ -8,6 +8,7 @@ const {
 describe('RoyaltiesProvider', function () {
   let royaltiesProviderContract, nftContract;
   let owner, nftContractOwner, user2, feeRecipient;
+  let account, fee;
 
   async function deploy() {
     [owner, nftContractOwner, user2, feeRecipient] = await ethers.getSigners();

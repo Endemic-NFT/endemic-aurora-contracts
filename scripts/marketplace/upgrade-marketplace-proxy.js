@@ -3,9 +3,10 @@ const { getForNetwork } = require('../utils/addresses');
 
 async function main() {
   const [deployer] = await ethers.getSigners();
-  const { marketplaceProxy, royaltiesProviderProxy } = getForNetwork(
-    network.name
-  );
+  const {
+    marketplaceProxy,
+    // royaltiesProviderProxy
+  } = getForNetwork(network.name);
 
   const Marketplace = await ethers.getContractFactory('Marketplace');
   await upgrades.upgradeProxy(marketplaceProxy, Marketplace, {

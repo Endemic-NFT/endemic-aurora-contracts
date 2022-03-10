@@ -3,10 +3,10 @@ const { ethers } = require('hardhat');
 const { deployEndemicMasterNFT } = require('../helpers/deploy');
 
 describe('EndemicMasterNFT', function () {
-  let masterNftContract, owner, minter, user;
+  let masterNftContract, owner, user, otherSigners;
 
   beforeEach(async function () {
-    [owner, minter, user, ...otherSigners] = await ethers.getSigners();
+    [owner, user, ...otherSigners] = await ethers.getSigners();
 
     masterNftContract = await deployEndemicMasterNFT();
     await masterNftContract.addDistributor(owner.address);
@@ -43,11 +43,11 @@ describe('EndemicMasterNFT', function () {
     });
 
     it('should mint up to max supply', async () => {
-      for (var i = 0; i < 50; i++) {
+      for (let i = 0; i < 50; i++) {
         await masterNftContract.mintNFT(owner.address);
       }
 
-      for (var i = 0; i < 50; i++) {
+      for (let i = 0; i < 50; i++) {
         const tokenId = await masterNftContract.tokenOfOwnerByIndex(
           owner.address,
           i
