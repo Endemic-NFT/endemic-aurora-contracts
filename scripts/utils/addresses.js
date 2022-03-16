@@ -12,7 +12,6 @@ const rinkeby = {
   artMinter: '0x559C5a1058f1aD85842459BbeFDe10f909cc4472',
   collectionBidProxy: '0x4F24FaFe8fD1Cb95d36A8C2cEf74526394281d47',
   endemicErc20: '',
-  tipjar: '0x8483c08c7AB569dA9A7bb1Af4D8C333592BA16Ab',
 
   endemicERC1155Proxy: '',
   endemicERC1155Beacon: '',
