@@ -16,6 +16,8 @@ const rinkeby = {
   endemicERC1155Proxy: '',
   endemicERC1155Beacon: '',
   endemicERC1155Factory: '',
+
+  metadataUpdater: '0x0Fd3CAc3da631ac5F6A18bcFF5F595dEBAC0B3eF',
 };
 
 const aurora_testnet = {
@@ -56,6 +58,8 @@ const aurora = {
   endemicERC1155Proxy: '',
   endemicERC1155Beacon: '',
   endemicERC1155Factory: '',
+
+  metadataUpdater: '0x8C7C8539e48e0808E89acecEEFabd85FC2875599',
 };
 
 const networks = {

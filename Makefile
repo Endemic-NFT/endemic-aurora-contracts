@@ -6,6 +6,10 @@ deployArtMinter:
 deployContractImporter:
 	npx hardhat run scripts/import/deploy-contract-importer.js --network ${network}
 
+.PHONY: deployMetadataUpdater
+deployMetadataUpdater:
+	npx hardhat run scripts/import/deploy-metadata-updater.js --network ${network}
+
 .PHONY: deployContractRegistry
 deployContractRegistry:
 	npx hardhat run scripts/contract-registry/deploy-contract-registry.js --network ${network}
