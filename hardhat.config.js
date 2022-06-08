@@ -52,7 +52,7 @@ module.exports = {
   },
   etherscan: {
     apiKey: {
-      // aurora: process.env.ETHERSCAN_API_KEY,
+      aurora: process.env.AURORASCAN_API_KEY,
       rinkeby: process.env.ETHERSCAN_API_KEY,
     },
   },
