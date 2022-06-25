@@ -1,3 +1,25 @@
+const goerli = {
+  contractRegistryProxy: '0x03B19c39355fD271A0fF071fAeaEe65F4fe26914',
+  endemicMasterKeyProxy: '0xFC69e4EFaB6e85D0400bf74873aEc6A5e4b73fbc',
+  feeProviderProxy: '0x4bfe31506DBCbf63ECda7320A060008e81acf8c5',
+  royaltiesProviderProxy: '0xF85Ab30873673dDe16E1d70518cB21814eE8fF9A',
+  endemicNftProxy: '0xaFFaD34721F0e77c1a25dE28e360175d6Aaf0d83',
+  marketplaceProxy: '0x42321A6BaF15C5cD5872fa79a2c58A7caEcbC077',
+  endemicNftBeacon: '0xdF5d587AbaF52De4d41cB04d114EDF0be6CcbD74',
+  endemicNftFactory: '0x801C7A8410E4bf11a27B6D4a42B1E157C3E98549',
+  offerProxy: '0xcb917eF216367b4Fba9EDce3138E960B9673537E',
+  contractImporter: '0xdEC71c37DCaa511db21b43e0Ccb53E04291a6dda',
+  artMinter: '',
+  collectionBidProxy: '',
+  endemicErc20: '',
+
+  endemicERC1155Proxy: '',
+  endemicERC1155Beacon: '',
+  endemicERC1155Factory: '',
+
+  metadataUpdater: '0x4D6a6fff9FF259Ec68AC2d3B7e6a1323Dd68cb92',
+};
+
 const rinkeby = {
   contractRegistryProxy: '0xD317923c94f41f25204680bc708E7Aa252BdF11b',
   endemicMasterKeyProxy: '0xC3Ee5c9Afe9dB7d931d5f695794AD3f1aBFD3602',
@@ -66,6 +88,7 @@ const networks = {
   aurora_testnet,
   aurora,
   rinkeby,
+  goerli,
 };
 
 const getForNetwork = (network) => networks[network];
